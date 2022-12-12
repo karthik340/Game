@@ -63,7 +63,7 @@ func getAddresses(
 	return senders, addresses
 }
 
-func getUser(creator string, fee, bet int64) *types.MsgPlaceBet {
+func getBet(creator string, fee, bet int64) *types.MsgPlaceBet {
 	return &types.MsgPlaceBet{
 		Creator: creator,
 		Fee:     sdk.NewCoin("token", sdk.NewInt(fee)),
@@ -77,15 +77,15 @@ func TestUserMsgServerCreate(t *testing.T) {
 	wctx := sdk.WrapSDKContext(ctx)
 
 	count := 20
-	creators, addresses := getAddresses(t, ctx, bk, count)
+	senders, addresses := getAddresses(t, ctx, bk, count)
 
-	users := make([]*types.MsgPlaceBet, count)
+	bets := make([]*types.MsgPlaceBet, count)
 	for i := 0; i < count; i++ {
-		users[i] = getUser(creators[i], 5, int64(i+1))
+		bets[i] = getBet(senders[i], 5, int64(i+1))
 	}
 
 	for i := 0; i < count; i++ {
-		_, err := srv.PlaceBet(wctx, users[i])
+		_, err := srv.PlaceBet(wctx, bets[i])
 		require.NoError(t, err)
 	}
 

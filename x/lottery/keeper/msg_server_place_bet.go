@@ -42,17 +42,12 @@ func (k Keeper) substituteBet(
 		return nil, errors.New("insufficient funds")
 	}
 
-	var user = types.Bet{ // use same txNum if bet exists already
-		Sender: msg.Creator,
-		Fee:    msg.Fee,
-		Bet:    msg.Bet,
-		TxNum:  existingUser.TxNum,
-		Status: false,
-	}
+	// use same txNum as bet exists already
+	existingUser.Bet = msg.Bet // update with new bet
 
 	k.SetBetInCurrentRound(
 		ctx,
-		user,
+		*existingUser,
 	)
 
 	return &types.MsgPlaceBetResponse{}, nil

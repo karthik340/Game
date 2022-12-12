@@ -42,6 +42,20 @@ func (k Keeper) GetBetInCurrentRound(
 	return val, true
 }
 
+// CheckForProposerInBets checks if proposer has participated in lottery
+func (k Keeper) CheckForProposerInBets(ctx sdk.Context) bool {
+	var addr sdk.AccAddress
+
+	err := addr.Unmarshal(ctx.BlockHeader().ProposerAddress)
+	if err != nil {
+		panic(err)
+	}
+
+	_, found := k.GetBetInCurrentRound(ctx, addr.String())
+
+	return found
+}
+
 // GetAllBet returns all bets in all rounds
 func (k Keeper) GetAllBet(ctx sdk.Context) (list []types.Bet) {
 	store := ctx.KVStore(k.storeKey)
@@ -142,8 +156,8 @@ func (k Keeper) PayWinner(ctx sdk.Context, winner types.Bet, bets Bets) {
 }
 
 // GetWinnerIndex hashes the transactions, does modulo on last 16 bits in hash by transaction count
-func (k Keeper) GetWinnerIndex(users []types.Bet, txnCount uint64, round uint64) uint64 {
-	rawData := k.MarshalBets(users)
+func (k Keeper) GetWinnerIndex(bets []types.Bet, txnCount uint64, round uint64) uint64 {
+	rawData := k.MarshalBets(bets)
 	rawData = append(rawData, sdk.Uint64ToBigEndian(round)...) // append round so that there is randomness,
 	hash := crypto.Keccak256Hash(rawData)                      // in case there are same transactions as previous round,
 	num := new(big.Int).SetBytes(hash[16:]).Uint64()
