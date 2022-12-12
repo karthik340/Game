@@ -3,7 +3,7 @@ package types_test
 import (
 	"testing"
 
-	"game/x/lottery/types"
+	"github.com/karthik340/game/x/lottery/types"
 	"github.com/stretchr/testify/require"
 )
 

@@ -6,10 +6,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	keepertest "game/testutil/keeper"
-	"game/testutil/nullify"
-	"game/x/lottery/keeper"
-	"game/x/lottery/types"
+	keepertest "github.com/karthik340/game/testutil/keeper"
+
+	"github.com/karthik340/game/testutil/nullify"
+
+	"github.com/karthik340/game/x/lottery/keeper"
+	"github.com/karthik340/game/x/lottery/types"
 )
 
 func createTestRound(keeper *keeper.Keeper, ctx sdk.Context) types.Round {
@@ -19,7 +21,7 @@ func createTestRound(keeper *keeper.Keeper, ctx sdk.Context) types.Round {
 }
 
 func TestRoundGet(t *testing.T) {
-	keeper, ctx := keepertest.LotteryKeeper(t)
+	keeper, _, _, ctx := keepertest.LotteryKeeper(t)
 	item := createTestRound(keeper, ctx)
 	rst, found := keeper.GetRound(ctx)
 	require.True(t, found)
@@ -27,12 +29,4 @@ func TestRoundGet(t *testing.T) {
 		nullify.Fill(&item),
 		nullify.Fill(&rst),
 	)
-}
-
-func TestRoundRemove(t *testing.T) {
-	keeper, ctx := keepertest.LotteryKeeper(t)
-	createTestRound(keeper, ctx)
-	keeper.RemoveRound(ctx)
-	_, found := keeper.GetRound(ctx)
-	require.False(t, found)
 }

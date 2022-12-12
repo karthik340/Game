@@ -12,25 +12,25 @@ var _ paramtypes.ParamSet = (*Params)(nil)
 var (
 	KeyMinFee = []byte("MinFee")
 	// TODO: Determine the default value
-	DefaultMinFee uint64 = 0
+	DefaultMinFee uint64 = 5
 )
 
 var (
 	KeyMinBet = []byte("MinBet")
 	// TODO: Determine the default value
-	DefaultMinBet uint64 = 0
+	DefaultMinBet uint64 = 1
 )
 
 var (
 	KeyMaxBet = []byte("MaxBet")
 	// TODO: Determine the default value
-	DefaultMaxBet uint64 = 0
+	DefaultMaxBet uint64 = 100
 )
 
 var (
 	KeyMinTxn = []byte("MinTxn")
 	// TODO: Determine the default value
-	DefaultMinTxn uint64 = 0
+	DefaultMinTxn uint64 = 10
 )
 
 // ParamKeyTable the param key table for launch module

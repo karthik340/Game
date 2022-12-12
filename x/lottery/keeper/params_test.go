@@ -3,13 +3,14 @@ package keeper_test
 import (
 	"testing"
 
-	testkeeper "game/testutil/keeper"
-	"game/x/lottery/types"
+	testkeeper "github.com/karthik340/game/testutil/keeper"
+
+	"github.com/karthik340/game/x/lottery/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestGetParams(t *testing.T) {
-	k, ctx := testkeeper.LotteryKeeper(t)
+	k, _, _, ctx := testkeeper.LotteryKeeper(t)
 	params := types.DefaultParams()
 
 	k.SetParams(ctx, params)

@@ -3,9 +3,9 @@ package cli
 import (
 	"context"
 
-	"game/x/lottery/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/karthik340/game/x/lottery/types"
 	"github.com/spf13/cobra"
 )
 

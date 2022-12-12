@@ -3,10 +3,10 @@ package lottery
 import (
 	"fmt"
 
-	"game/x/lottery/keeper"
-	"game/x/lottery/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/karthik340/game/x/lottery/keeper"
+	"github.com/karthik340/game/x/lottery/types"
 )
 
 // NewHandler ...

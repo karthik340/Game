@@ -1,12 +1,12 @@
 package keeper
 
 import (
-	"game/x/lottery/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/karthik340/game/x/lottery/types"
 )
 
-// SetRound set round in the store
+// SetRound sets round in the store
 func (k Keeper) SetRound(ctx sdk.Context, round types.Round) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RoundKey))
 	b := k.cdc.MustMarshal(&round)
@@ -24,10 +24,4 @@ func (k Keeper) GetRound(ctx sdk.Context) (val types.Round, found bool) {
 
 	k.cdc.MustUnmarshal(b, &val)
 	return val, true
-}
-
-// RemoveRound removes round from the store
-func (k Keeper) RemoveRound(ctx sdk.Context) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RoundKey))
-	store.Delete([]byte{0})
 }

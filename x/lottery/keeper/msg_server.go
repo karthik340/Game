@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"game/x/lottery/types"
+	"github.com/karthik340/game/x/lottery/types"
 )
 
 type msgServer struct {

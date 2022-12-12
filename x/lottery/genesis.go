@@ -1,9 +1,9 @@
 package lottery
 
 import (
-	"game/x/lottery/keeper"
-	"game/x/lottery/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/karthik340/game/x/lottery/keeper"
+	"github.com/karthik340/game/x/lottery/types"
 )
 
 // InitGenesis initializes the capability module's state from a provided genesis
@@ -19,7 +19,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	}
 	// Set all the bet
 	for _, elem := range genState.BetList {
-		k.SetBet(ctx, elem)
+		k.SetBetInCurrentRound(ctx, elem)
 	}
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)

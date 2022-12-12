@@ -19851,14 +19851,41 @@ paths:
                   properties:
                     sender:
                       type: string
-                    betSize:
-                      type: string
-                      format: uint64
                     fee:
-                      type: string
-                      format: uint64
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+                    bet:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
                     status:
                       type: boolean
+                    txNum:
+                      type: string
+                      format: uint64
               pagination:
                 type: object
                 properties:
@@ -19978,14 +20005,41 @@ paths:
                 properties:
                   sender:
                     type: string
-                  betSize:
-                    type: string
-                    format: uint64
                   fee:
-                    type: string
-                    format: uint64
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
+
+
+                      NOTE: The amount field is an Int which implements the
+                      custom method
+
+                      signatures required by gogoproto.
+                  bet:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
+
+
+                      NOTE: The amount field is an Int which implements the
+                      custom method
+
+                      signatures required by gogoproto.
                   status:
                     type: boolean
+                  txNum:
+                    type: string
+                    format: uint64
         default:
           description: An unexpected error response.
           schema:
@@ -47688,14 +47742,35 @@ definitions:
     properties:
       sender:
         type: string
-      betSize:
-        type: string
-        format: uint64
       fee:
-        type: string
-        format: uint64
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+      bet:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
       status:
         type: boolean
+      txNum:
+        type: string
+        format: uint64
   game.lottery.MsgPlaceBetResponse:
     type: object
   game.lottery.Params:
@@ -47724,14 +47799,41 @@ definitions:
           properties:
             sender:
               type: string
-            betSize:
-              type: string
-              format: uint64
             fee:
-              type: string
-              format: uint64
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+            bet:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
             status:
               type: boolean
+            txNum:
+              type: string
+              format: uint64
       pagination:
         type: object
         properties:
@@ -47765,14 +47867,41 @@ definitions:
         properties:
           sender:
             type: string
-          betSize:
-            type: string
-            format: uint64
           fee:
-            type: string
-            format: uint64
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
+            description: >-
+              Coin defines a token with a denomination and an amount.
+
+
+              NOTE: The amount field is an Int which implements the custom
+              method
+
+              signatures required by gogoproto.
+          bet:
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
+            description: >-
+              Coin defines a token with a denomination and an amount.
+
+
+              NOTE: The amount field is an Int which implements the custom
+              method
+
+              signatures required by gogoproto.
           status:
             type: boolean
+          txNum:
+            type: string
+            format: uint64
   game.lottery.QueryGetRoundResponse:
     type: object
     properties:

@@ -3,11 +3,11 @@ package simulation
 import (
 	"math/rand"
 
-	"game/x/lottery/keeper"
-	"game/x/lottery/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
+	"github.com/karthik340/game/x/lottery/keeper"
+	"github.com/karthik340/game/x/lottery/types"
 )
 
 func SimulateMsgPlaceBet(

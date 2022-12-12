@@ -1,12 +1,12 @@
 package keeper
 
 import (
-	"game/x/lottery/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/karthik340/game/x/lottery/types"
 )
 
-// SetTxnCounter set txnCounter in the store
+// SetTxnCounter sets txnCounter in the store
 func (k Keeper) SetTxnCounter(ctx sdk.Context, txnCounter types.TxnCounter) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TxnCounterKey))
 	b := k.cdc.MustMarshal(&txnCounter)
@@ -24,10 +24,4 @@ func (k Keeper) GetTxnCounter(ctx sdk.Context) (val types.TxnCounter, found bool
 
 	k.cdc.MustUnmarshal(b, &val)
 	return val, true
-}
-
-// RemoveTxnCounter removes txnCounter from the store
-func (k Keeper) RemoveTxnCounter(ctx sdk.Context) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TxnCounterKey))
-	store.Delete([]byte{0})
 }

@@ -98,10 +98,10 @@ import (
 	monitoringpkeeper "github.com/tendermint/spn/x/monitoringp/keeper"
 	monitoringptypes "github.com/tendermint/spn/x/monitoringp/types"
 
-	"game/docs"
-	lotterymodule "game/x/lottery"
-	lotterymodulekeeper "game/x/lottery/keeper"
-	lotterymoduletypes "game/x/lottery/types"
+	"github.com/karthik340/game/docs"
+	lotterymodule "github.com/karthik340/game/x/lottery"
+	lotterymodulekeeper "github.com/karthik340/game/x/lottery/keeper"
+	lotterymoduletypes "github.com/karthik340/game/x/lottery/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -169,6 +169,7 @@ var (
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		lotterymoduletypes.ModuleName:  {authtypes.Minter, authtypes.Burner},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -393,6 +394,8 @@ func New(
 		keys[lotterymoduletypes.StoreKey],
 		keys[lotterymoduletypes.MemStoreKey],
 		app.GetSubspace(lotterymoduletypes.ModuleName),
+		app.BankKeeper,
+		app.AccountKeeper,
 	)
 	lotteryModule := lotterymodule.NewAppModule(appCodec, app.LotteryKeeper, app.AccountKeeper, app.BankKeeper)
 

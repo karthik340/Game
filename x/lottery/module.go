@@ -11,14 +11,14 @@ import (
 
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	"game/x/lottery/client/cli"
-	"game/x/lottery/keeper"
-	"game/x/lottery/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	"github.com/karthik340/game/x/lottery/client/cli"
+	"github.com/karthik340/game/x/lottery/keeper"
+	"github.com/karthik340/game/x/lottery/types"
 )
 
 var (
@@ -170,6 +170,7 @@ func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 
 // EndBlock executes all ABCI EndBlock logic respective to the capability module. It
 // returns no validator updates.
-func (am AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
+func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
+	EndBlocker(ctx, am.keeper)
 	return []abci.ValidatorUpdate{}
 }

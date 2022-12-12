@@ -9,7 +9,7 @@ const TypeMsgPlaceBet = "place_bet"
 
 var _ sdk.Msg = &MsgPlaceBet{}
 
-func NewMsgPlaceBet(creator string, fee string, bet string) *MsgPlaceBet {
+func NewMsgPlaceBet(creator string, fee sdk.Coin, bet sdk.Coin) *MsgPlaceBet {
 	return &MsgPlaceBet{
 		Creator: creator,
 		Fee:     fee,

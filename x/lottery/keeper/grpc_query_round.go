@@ -3,8 +3,8 @@ package keeper
 import (
 	"context"
 
-	"game/x/lottery/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/karthik340/game/x/lottery/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

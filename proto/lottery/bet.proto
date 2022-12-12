@@ -1,13 +1,20 @@
 syntax = "proto3";
 package game.lottery;
-
-option go_package = "game/x/lottery/types";
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+option go_package = "github.com/karthik340/game/x/lottery/types";
 
 message Bet {
-  string sender = 1; 
-  uint64 betSize = 2; 
-  uint64 fee = 3; 
-  bool status = 4; 
-  
+  string sender = 1;
+  cosmos.base.v1beta1.Coin fee = 2
+  [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+
+  cosmos.base.v1beta1.Coin bet = 3
+  [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+
+  bool status = 4;
+
+  uint64 txNum =5;
 }
 

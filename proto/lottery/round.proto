@@ -1,7 +1,7 @@
 syntax = "proto3";
 package game.lottery;
 
-option go_package = "game/x/lottery/types";
+option go_package = "github.com/karthik340/game/x/lottery/types";
 
 message Round {
   uint64 val = 1; 

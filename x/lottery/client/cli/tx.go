@@ -8,7 +8,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	// "github.com/cosmos/cosmos-sdk/client/flags"
-	"game/x/lottery/types"
+	"github.com/karthik340/game/x/lottery/types"
 )
 
 var (

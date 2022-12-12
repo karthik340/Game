@@ -4,11 +4,12 @@ import (
 	"strconv"
 	"testing"
 
-	keepertest "game/testutil/keeper"
-	"game/testutil/nullify"
-	"game/x/lottery/keeper"
-	"game/x/lottery/types"
+	keepertest "github.com/karthik340/game/testutil/keeper"
+	"github.com/karthik340/game/testutil/nullify"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/karthik340/game/x/lottery/keeper"
+	"github.com/karthik340/game/x/lottery/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -20,16 +21,16 @@ func createNBet(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Bet {
 	for i := range items {
 		items[i].Sender = strconv.Itoa(i)
 
-		keeper.SetBet(ctx, items[i])
+		keeper.SetBetInCurrentRound(ctx, items[i])
 	}
 	return items
 }
 
 func TestBetGet(t *testing.T) {
-	keeper, ctx := keepertest.LotteryKeeper(t)
-	items := createNBet(keeper, ctx, 10)
+	k, _, _, ctx := keepertest.LotteryKeeper(t)
+	items := createNBet(k, ctx, 10)
 	for _, item := range items {
-		rst, found := keeper.GetBet(ctx,
+		rst, found := k.GetBetInCurrentRound(ctx,
 			item.Sender,
 		)
 		require.True(t, found)
@@ -39,25 +40,12 @@ func TestBetGet(t *testing.T) {
 		)
 	}
 }
-func TestBetRemove(t *testing.T) {
-	keeper, ctx := keepertest.LotteryKeeper(t)
-	items := createNBet(keeper, ctx, 10)
-	for _, item := range items {
-		keeper.RemoveBet(ctx,
-			item.Sender,
-		)
-		_, found := keeper.GetBet(ctx,
-			item.Sender,
-		)
-		require.False(t, found)
-	}
-}
 
 func TestBetGetAll(t *testing.T) {
-	keeper, ctx := keepertest.LotteryKeeper(t)
-	items := createNBet(keeper, ctx, 10)
+	k, _, _, ctx := keepertest.LotteryKeeper(t)
+	items := createNBet(k, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),
-		nullify.Fill(keeper.GetAllBet(ctx)),
+		nullify.Fill(k.GetAllBet(ctx)),
 	)
 }

@@ -12,10 +12,11 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"game/testutil/network"
-	"game/testutil/nullify"
-	"game/x/lottery/client/cli"
-	"game/x/lottery/types"
+	"github.com/karthik340/game/testutil/network"
+	"github.com/karthik340/game/testutil/nullify"
+
+	"github.com/karthik340/game/x/lottery/client/cli"
+	"github.com/karthik340/game/x/lottery/types"
 )
 
 // Prevent strconv unused error

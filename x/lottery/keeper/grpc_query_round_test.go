@@ -8,13 +8,13 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	keepertest "game/testutil/keeper"
-	"game/testutil/nullify"
-	"game/x/lottery/types"
+	keepertest "github.com/karthik340/game/testutil/keeper"
+	"github.com/karthik340/game/testutil/nullify"
+	"github.com/karthik340/game/x/lottery/types"
 )
 
 func TestRoundQuery(t *testing.T) {
-	keeper, ctx := keepertest.LotteryKeeper(t)
+	keeper, _, _, ctx := keepertest.LotteryKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
 	item := createTestRound(keeper, ctx)
 	for _, tc := range []struct {

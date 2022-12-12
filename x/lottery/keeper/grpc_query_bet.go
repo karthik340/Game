@@ -3,10 +3,10 @@ package keeper
 import (
 	"context"
 
-	"game/x/lottery/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
+	"github.com/karthik340/game/x/lottery/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -20,7 +20,7 @@ func (k Keeper) BetAll(c context.Context, req *types.QueryAllBetRequest) (*types
 	ctx := sdk.UnwrapSDKContext(c)
 
 	store := ctx.KVStore(k.storeKey)
-	betStore := prefix.NewStore(store, types.KeyPrefix(types.BetKeyPrefix))
+	betStore := prefix.NewStore(store, types.BetKeyPrefix)
 
 	pageRes, err := query.Paginate(betStore, req.Pagination, func(key []byte, value []byte) error {
 		var bet types.Bet
@@ -45,7 +45,7 @@ func (k Keeper) Bet(c context.Context, req *types.QueryGetBetRequest) (*types.Qu
 	}
 	ctx := sdk.UnwrapSDKContext(c)
 
-	val, found := k.GetBet(
+	val, found := k.GetBetInCurrentRound(
 		ctx,
 		req.Sender,
 	)

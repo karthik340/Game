@@ -10,9 +10,13 @@ const DefaultIndex uint64 = 1
 // DefaultGenesis returns the default Capability genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-		Round:      nil,
-		TxnCounter: nil,
-		BetList:    []Bet{},
+		Round: &Round{
+			Val: 0,
+		},
+		TxnCounter: &TxnCounter{
+			Val: 0,
+		},
+		BetList: []Bet{},
 		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
@@ -25,7 +29,7 @@ func (gs GenesisState) Validate() error {
 	betIndexMap := make(map[string]struct{})
 
 	for _, elem := range gs.BetList {
-		index := string(BetKey(elem.Sender))
+		index := string(BetKey(Round{Val: 0}, elem.Sender))
 		if _, ok := betIndexMap[index]; ok {
 			return fmt.Errorf("duplicated index for bet")
 		}

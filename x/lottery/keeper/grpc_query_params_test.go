@@ -3,14 +3,15 @@ package keeper_test
 import (
 	"testing"
 
-	testkeeper "game/testutil/keeper"
-	"game/x/lottery/types"
+	testkeeper "github.com/karthik340/game/testutil/keeper"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/karthik340/game/x/lottery/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestParamsQuery(t *testing.T) {
-	keeper, ctx := testkeeper.LotteryKeeper(t)
+	keeper, _, _, ctx := testkeeper.LotteryKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
 	params := types.DefaultParams()
 	keeper.SetParams(ctx, params)

@@ -3,10 +3,12 @@ package cli
 import (
 	"strconv"
 
-	"game/x/lottery/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	"github.com/karthik340/game/x/lottery/types"
 	"github.com/spf13/cobra"
 )
 
@@ -18,8 +20,15 @@ func CmdPlaceBet() *cobra.Command {
 		Short: "Broadcast message placeBet",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			argFee := args[0]
-			argBet := args[1]
+			fee, err := sdk.ParseCoinNormalized(args[0])
+			if err != nil {
+				return err
+			}
+
+			bet, err := sdk.ParseCoinNormalized(args[1])
+			if err != nil {
+				return err
+			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -28,8 +37,8 @@ func CmdPlaceBet() *cobra.Command {
 
 			msg := types.NewMsgPlaceBet(
 				clientCtx.GetFromAddress().String(),
-				argFee,
-				argBet,
+				fee,
+				bet,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
