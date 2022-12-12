@@ -26,12 +26,21 @@ export interface LotteryParams {
   minTxn?: string;
 }
 
+export interface LotteryQueryGetRoundResponse {
+  Round?: LotteryRound;
+}
+
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
 export interface LotteryQueryParamsResponse {
   /** params holds all the parameters of this module. */
   params?: LotteryParams;
+}
+
+export interface LotteryRound {
+  /** @format uint64 */
+  val?: string;
 }
 
 export interface ProtobufAny {
@@ -252,6 +261,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<LotteryQueryParamsResponse, RpcStatus>({
       path: `/game/lottery/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryRound
+   * @summary Queries a Round by index.
+   * @request GET:/game/lottery/round
+   */
+  queryRound = (params: RequestParams = {}) =>
+    this.request<LotteryQueryGetRoundResponse, RpcStatus>({
+      path: `/game/lottery/round`,
       method: "GET",
       format: "json",
       ...params,

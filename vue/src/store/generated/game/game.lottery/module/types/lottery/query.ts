@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../lottery/params";
+import { Round } from "../lottery/round";
 
 export const protobufPackage = "game.lottery";
 
@@ -11,6 +12,12 @@ export interface QueryParamsRequest {}
 export interface QueryParamsResponse {
   /** params holds all the parameters of this module. */
   params: Params | undefined;
+}
+
+export interface QueryGetRoundRequest {}
+
+export interface QueryGetRoundResponse {
+  Round: Round | undefined;
 }
 
 const baseQueryParamsRequest: object = {};
@@ -110,10 +117,111 @@ export const QueryParamsResponse = {
   },
 };
 
+const baseQueryGetRoundRequest: object = {};
+
+export const QueryGetRoundRequest = {
+  encode(_: QueryGetRoundRequest, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetRoundRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryGetRoundRequest } as QueryGetRoundRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): QueryGetRoundRequest {
+    const message = { ...baseQueryGetRoundRequest } as QueryGetRoundRequest;
+    return message;
+  },
+
+  toJSON(_: QueryGetRoundRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: DeepPartial<QueryGetRoundRequest>): QueryGetRoundRequest {
+    const message = { ...baseQueryGetRoundRequest } as QueryGetRoundRequest;
+    return message;
+  },
+};
+
+const baseQueryGetRoundResponse: object = {};
+
+export const QueryGetRoundResponse = {
+  encode(
+    message: QueryGetRoundResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.Round !== undefined) {
+      Round.encode(message.Round, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetRoundResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryGetRoundResponse } as QueryGetRoundResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.Round = Round.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetRoundResponse {
+    const message = { ...baseQueryGetRoundResponse } as QueryGetRoundResponse;
+    if (object.Round !== undefined && object.Round !== null) {
+      message.Round = Round.fromJSON(object.Round);
+    } else {
+      message.Round = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetRoundResponse): unknown {
+    const obj: any = {};
+    message.Round !== undefined &&
+      (obj.Round = message.Round ? Round.toJSON(message.Round) : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetRoundResponse>
+  ): QueryGetRoundResponse {
+    const message = { ...baseQueryGetRoundResponse } as QueryGetRoundResponse;
+    if (object.Round !== undefined && object.Round !== null) {
+      message.Round = Round.fromPartial(object.Round);
+    } else {
+      message.Round = undefined;
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+  /** Queries a Round by index. */
+  Round(request: QueryGetRoundRequest): Promise<QueryGetRoundResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -125,6 +233,14 @@ export class QueryClientImpl implements Query {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request("game.lottery.Query", "Params", data);
     return promise.then((data) => QueryParamsResponse.decode(new Reader(data)));
+  }
+
+  Round(request: QueryGetRoundRequest): Promise<QueryGetRoundResponse> {
+    const data = QueryGetRoundRequest.encode(request).finish();
+    const promise = this.rpc.request("game.lottery.Query", "Round", data);
+    return promise.then((data) =>
+      QueryGetRoundResponse.decode(new Reader(data))
+    );
   }
 }
 

@@ -19883,6 +19883,42 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
+  /game/lottery/round:
+    get:
+      summary: Queries a Round by index.
+      operationId: GameLotteryRound
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Round:
+                type: object
+                properties:
+                  val:
+                    type: string
+                    format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   /ibc/apps/interchain_accounts/controller/v1/params:
     get:
       summary: Params queries all parameters of the ICA controller submodule.
@@ -47450,6 +47486,15 @@ definitions:
         type: string
         format: uint64
     description: Params defines the parameters for the module.
+  game.lottery.QueryGetRoundResponse:
+    type: object
+    properties:
+      Round:
+        type: object
+        properties:
+          val:
+            type: string
+            format: uint64
   game.lottery.QueryParamsResponse:
     type: object
     properties:
@@ -47470,6 +47515,12 @@ definitions:
             type: string
             format: uint64
     description: QueryParamsResponse is response type for the Query/Params RPC method.
+  game.lottery.Round:
+    type: object
+    properties:
+      val:
+        type: string
+        format: uint64
   ibc.applications.interchain_accounts.controller.v1.Params:
     type: object
     properties:
