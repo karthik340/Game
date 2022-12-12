@@ -30,6 +30,10 @@ export interface LotteryQueryGetRoundResponse {
   Round?: LotteryRound;
 }
 
+export interface LotteryQueryGetTxnCounterResponse {
+  TxnCounter?: LotteryTxnCounter;
+}
+
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
@@ -39,6 +43,11 @@ export interface LotteryQueryParamsResponse {
 }
 
 export interface LotteryRound {
+  /** @format uint64 */
+  val?: string;
+}
+
+export interface LotteryTxnCounter {
   /** @format uint64 */
   val?: string;
 }
@@ -277,6 +286,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryRound = (params: RequestParams = {}) =>
     this.request<LotteryQueryGetRoundResponse, RpcStatus>({
       path: `/game/lottery/round`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryTxnCounter
+   * @summary Queries a TxnCounter by index.
+   * @request GET:/game/lottery/txn_counter
+   */
+  queryTxnCounter = (params: RequestParams = {}) =>
+    this.request<LotteryQueryGetTxnCounterResponse, RpcStatus>({
+      path: `/game/lottery/txn_counter`,
       method: "GET",
       format: "json",
       ...params,

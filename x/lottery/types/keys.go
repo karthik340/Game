@@ -24,3 +24,7 @@ func KeyPrefix(p string) []byte {
 const (
 	RoundKey = "Round-value-"
 )
+
+const (
+	TxnCounterKey = "TxnCounter-value-"
+)

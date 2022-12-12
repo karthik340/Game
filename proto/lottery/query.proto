@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "lottery/params.proto";
 import "lottery/round.proto";
+import "lottery/txn_counter.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "game/x/lottery/types";
@@ -19,6 +20,10 @@ service Query {
   // Queries a Round by index.
 	rpc Round(QueryGetRoundRequest) returns (QueryGetRoundResponse) {
 		option (google.api.http).get = "/game/lottery/round";
+	}
+// Queries a TxnCounter by index.
+	rpc TxnCounter(QueryGetTxnCounterRequest) returns (QueryGetTxnCounterResponse) {
+		option (google.api.http).get = "/game/lottery/txn_counter";
 	}
 // this line is used by starport scaffolding # 2
 }
@@ -36,5 +41,10 @@ message QueryGetRoundRequest {}
 
 message QueryGetRoundResponse {
 	Round Round = 1 [(gogoproto.nullable) = false];
+}
+message QueryGetTxnCounterRequest {}
+
+message QueryGetTxnCounterResponse {
+	TxnCounter TxnCounter = 1 [(gogoproto.nullable) = false];
 }
 // this line is used by starport scaffolding # 3

@@ -13,6 +13,10 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	if genState.Round != nil {
 		k.SetRound(ctx, *genState.Round)
 	}
+	// Set if defined
+	if genState.TxnCounter != nil {
+		k.SetTxnCounter(ctx, *genState.TxnCounter)
+	}
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
 }
@@ -26,6 +30,11 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	round, found := k.GetRound(ctx)
 	if found {
 		genesis.Round = &round
+	}
+	// Get all txnCounter
+	txnCounter, found := k.GetTxnCounter(ctx)
+	if found {
+		genesis.TxnCounter = &txnCounter
 	}
 	// this line is used by starport scaffolding # genesis/module/export
 

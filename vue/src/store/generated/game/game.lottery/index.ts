@@ -2,9 +2,10 @@ import { txClient, queryClient, MissingWalletError , registry} from './module'
 
 import { Params } from "./module/types/lottery/params"
 import { Round } from "./module/types/lottery/round"
+import { TxnCounter } from "./module/types/lottery/txn_counter"
 
 
-export { Params, Round };
+export { Params, Round, TxnCounter };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -44,10 +45,12 @@ const getDefaultState = () => {
 	return {
 				Params: {},
 				Round: {},
+				TxnCounter: {},
 				
 				_Structure: {
 						Params: getStructure(Params.fromPartial({})),
 						Round: getStructure(Round.fromPartial({})),
+						TxnCounter: getStructure(TxnCounter.fromPartial({})),
 						
 		},
 		_Registry: registry,
@@ -87,6 +90,12 @@ export default {
 						(<any> params).query=null
 					}
 			return state.Round[JSON.stringify(params)] ?? {}
+		},
+				getTxnCounter: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.TxnCounter[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -161,6 +170,28 @@ export default {
 				return getters['getRound']( { params: {...key}, query}) ?? {}
 			} catch (e) {
 				throw new Error('QueryClient:QueryRound API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryTxnCounter({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryTxnCounter()).data
+				
+					
+				commit('QUERY', { query: 'TxnCounter', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryTxnCounter', payload: { options: { all }, params: {...key},query }})
+				return getters['getTxnCounter']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryTxnCounter API Node Unavailable. Could not perform query: ' + e.message)
 				
 			}
 		},

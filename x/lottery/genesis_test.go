@@ -17,6 +17,9 @@ func TestGenesis(t *testing.T) {
 		Round: &types.Round{
 			Val: 80,
 		},
+		TxnCounter: &types.TxnCounter{
+			Val: 52,
+		},
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -29,5 +32,6 @@ func TestGenesis(t *testing.T) {
 	nullify.Fill(got)
 
 	require.Equal(t, genesisState.Round, got.Round)
+	require.Equal(t, genesisState.TxnCounter, got.TxnCounter)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

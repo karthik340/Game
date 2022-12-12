@@ -1,0 +1,9 @@
+syntax = "proto3";
+package game.lottery;
+
+option go_package = "game/x/lottery/types";
+
+message TxnCounter {
+  uint64 val = 1; 
+  
+}

@@ -2,6 +2,7 @@
 import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../lottery/params";
 import { Round } from "../lottery/round";
+import { TxnCounter } from "../lottery/txn_counter";
 
 export const protobufPackage = "game.lottery";
 
@@ -18,6 +19,12 @@ export interface QueryGetRoundRequest {}
 
 export interface QueryGetRoundResponse {
   Round: Round | undefined;
+}
+
+export interface QueryGetTxnCounterRequest {}
+
+export interface QueryGetTxnCounterResponse {
+  TxnCounter: TxnCounter | undefined;
 }
 
 const baseQueryParamsRequest: object = {};
@@ -216,12 +223,140 @@ export const QueryGetRoundResponse = {
   },
 };
 
+const baseQueryGetTxnCounterRequest: object = {};
+
+export const QueryGetTxnCounterRequest = {
+  encode(
+    _: QueryGetTxnCounterRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetTxnCounterRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetTxnCounterRequest,
+    } as QueryGetTxnCounterRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): QueryGetTxnCounterRequest {
+    const message = {
+      ...baseQueryGetTxnCounterRequest,
+    } as QueryGetTxnCounterRequest;
+    return message;
+  },
+
+  toJSON(_: QueryGetTxnCounterRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(
+    _: DeepPartial<QueryGetTxnCounterRequest>
+  ): QueryGetTxnCounterRequest {
+    const message = {
+      ...baseQueryGetTxnCounterRequest,
+    } as QueryGetTxnCounterRequest;
+    return message;
+  },
+};
+
+const baseQueryGetTxnCounterResponse: object = {};
+
+export const QueryGetTxnCounterResponse = {
+  encode(
+    message: QueryGetTxnCounterResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.TxnCounter !== undefined) {
+      TxnCounter.encode(message.TxnCounter, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetTxnCounterResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetTxnCounterResponse,
+    } as QueryGetTxnCounterResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.TxnCounter = TxnCounter.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetTxnCounterResponse {
+    const message = {
+      ...baseQueryGetTxnCounterResponse,
+    } as QueryGetTxnCounterResponse;
+    if (object.TxnCounter !== undefined && object.TxnCounter !== null) {
+      message.TxnCounter = TxnCounter.fromJSON(object.TxnCounter);
+    } else {
+      message.TxnCounter = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetTxnCounterResponse): unknown {
+    const obj: any = {};
+    message.TxnCounter !== undefined &&
+      (obj.TxnCounter = message.TxnCounter
+        ? TxnCounter.toJSON(message.TxnCounter)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetTxnCounterResponse>
+  ): QueryGetTxnCounterResponse {
+    const message = {
+      ...baseQueryGetTxnCounterResponse,
+    } as QueryGetTxnCounterResponse;
+    if (object.TxnCounter !== undefined && object.TxnCounter !== null) {
+      message.TxnCounter = TxnCounter.fromPartial(object.TxnCounter);
+    } else {
+      message.TxnCounter = undefined;
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
   /** Queries a Round by index. */
   Round(request: QueryGetRoundRequest): Promise<QueryGetRoundResponse>;
+  /** Queries a TxnCounter by index. */
+  TxnCounter(
+    request: QueryGetTxnCounterRequest
+  ): Promise<QueryGetTxnCounterResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -240,6 +375,16 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("game.lottery.Query", "Round", data);
     return promise.then((data) =>
       QueryGetRoundResponse.decode(new Reader(data))
+    );
+  }
+
+  TxnCounter(
+    request: QueryGetTxnCounterRequest
+  ): Promise<QueryGetTxnCounterResponse> {
+    const data = QueryGetTxnCounterRequest.encode(request).finish();
+    const promise = this.rpc.request("game.lottery.Query", "TxnCounter", data);
+    return promise.then((data) =>
+      QueryGetTxnCounterResponse.decode(new Reader(data))
     );
   }
 }

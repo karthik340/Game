@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Params } from "../lottery/params";
 import { Round } from "../lottery/round";
+import { TxnCounter } from "../lottery/txn_counter";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "game.lottery";
@@ -8,8 +9,9 @@ export const protobufPackage = "game.lottery";
 /** GenesisState defines the lottery module's genesis state. */
 export interface GenesisState {
   params: Params | undefined;
-  /** this line is used by starport scaffolding # genesis/proto/state */
   round: Round | undefined;
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  txnCounter: TxnCounter | undefined;
 }
 
 const baseGenesisState: object = {};
@@ -21,6 +23,9 @@ export const GenesisState = {
     }
     if (message.round !== undefined) {
       Round.encode(message.round, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.txnCounter !== undefined) {
+      TxnCounter.encode(message.txnCounter, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -37,6 +42,9 @@ export const GenesisState = {
           break;
         case 2:
           message.round = Round.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.txnCounter = TxnCounter.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -58,6 +66,11 @@ export const GenesisState = {
     } else {
       message.round = undefined;
     }
+    if (object.txnCounter !== undefined && object.txnCounter !== null) {
+      message.txnCounter = TxnCounter.fromJSON(object.txnCounter);
+    } else {
+      message.txnCounter = undefined;
+    }
     return message;
   },
 
@@ -67,6 +80,10 @@ export const GenesisState = {
       (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     message.round !== undefined &&
       (obj.round = message.round ? Round.toJSON(message.round) : undefined);
+    message.txnCounter !== undefined &&
+      (obj.txnCounter = message.txnCounter
+        ? TxnCounter.toJSON(message.txnCounter)
+        : undefined);
     return obj;
   },
 
@@ -81,6 +98,11 @@ export const GenesisState = {
       message.round = Round.fromPartial(object.round);
     } else {
       message.round = undefined;
+    }
+    if (object.txnCounter !== undefined && object.txnCounter !== null) {
+      message.txnCounter = TxnCounter.fromPartial(object.txnCounter);
+    } else {
+      message.txnCounter = undefined;
     }
     return message;
   },

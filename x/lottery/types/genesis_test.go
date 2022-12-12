@@ -25,6 +25,9 @@ func TestGenesisState_Validate(t *testing.T) {
 				Round: &types.Round{
 					Val: 64,
 				},
+				TxnCounter: &types.TxnCounter{
+					Val: 73,
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
