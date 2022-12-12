@@ -1,0 +1,13 @@
+syntax = "proto3";
+package game.lottery;
+
+option go_package = "game/x/lottery/types";
+
+message Bet {
+  string sender = 1; 
+  uint64 betSize = 2; 
+  uint64 fee = 3; 
+  bool status = 4; 
+  
+}
+

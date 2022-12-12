@@ -7,6 +7,7 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "lottery/params.proto";
 import "lottery/round.proto";
 import "lottery/txn_counter.proto";
+import "lottery/bet.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "game/x/lottery/types";
@@ -25,6 +26,16 @@ service Query {
 	rpc TxnCounter(QueryGetTxnCounterRequest) returns (QueryGetTxnCounterResponse) {
 		option (google.api.http).get = "/game/lottery/txn_counter";
 	}
+// Queries a Bet by index.
+	rpc Bet(QueryGetBetRequest) returns (QueryGetBetResponse) {
+		option (google.api.http).get = "/game/lottery/bet/{sender}";
+	}
+
+	// Queries a list of Bet items.
+	rpc BetAll(QueryAllBetRequest) returns (QueryAllBetResponse) {
+		option (google.api.http).get = "/game/lottery/bet";
+	}
+
 // this line is used by starport scaffolding # 2
 }
 
@@ -47,4 +58,22 @@ message QueryGetTxnCounterRequest {}
 message QueryGetTxnCounterResponse {
 	TxnCounter TxnCounter = 1 [(gogoproto.nullable) = false];
 }
+message QueryGetBetRequest {
+	  string sender = 1;
+
+}
+
+message QueryGetBetResponse {
+	Bet bet = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllBetRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllBetResponse {
+	repeated Bet bet = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
 // this line is used by starport scaffolding # 3

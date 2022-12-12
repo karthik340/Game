@@ -28,9 +28,31 @@ func TestGenesisState_Validate(t *testing.T) {
 				TxnCounter: &types.TxnCounter{
 					Val: 73,
 				},
+				BetList: []types.Bet{
+					{
+						Sender: "0",
+					},
+					{
+						Sender: "1",
+					},
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
+		},
+		{
+			desc: "duplicated bet",
+			genState: &types.GenesisState{
+				BetList: []types.Bet{
+					{
+						Sender: "0",
+					},
+					{
+						Sender: "0",
+					},
+				},
+			},
+			valid: false,
 		},
 		// this line is used by starport scaffolding # types/genesis/testcase
 	} {

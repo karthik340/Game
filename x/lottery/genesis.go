@@ -17,6 +17,10 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	if genState.TxnCounter != nil {
 		k.SetTxnCounter(ctx, *genState.TxnCounter)
 	}
+	// Set all the bet
+	for _, elem := range genState.BetList {
+		k.SetBet(ctx, elem)
+	}
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
 }
@@ -36,6 +40,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	if found {
 		genesis.TxnCounter = &txnCounter
 	}
+	genesis.BetList = k.GetAllBet(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis

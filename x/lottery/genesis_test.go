@@ -20,6 +20,14 @@ func TestGenesis(t *testing.T) {
 		TxnCounter: &types.TxnCounter{
 			Val: 52,
 		},
+		BetList: []types.Bet{
+			{
+				Sender: "0",
+			},
+			{
+				Sender: "1",
+			},
+		},
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -33,5 +41,6 @@ func TestGenesis(t *testing.T) {
 
 	require.Equal(t, genesisState.Round, got.Round)
 	require.Equal(t, genesisState.TxnCounter, got.TxnCounter)
+	require.ElementsMatch(t, genesisState.BetList, got.BetList)
 	// this line is used by starport scaffolding # genesis/test/assert
 }
