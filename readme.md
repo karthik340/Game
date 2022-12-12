@@ -217,5 +217,5 @@ gamed query bank balances $alice
   * If everyone places same bet, then it is considered winner placed highest be in both code and strategy
 
 ## Changes in app.go
-* give permission for module account to mint and burn accounts, so we can store tokens in module account
+* give permission for module account to mint and burn tokens, so that we can store tokens in module account
 * Add bank keeper and authentication keeper for lottery module 
