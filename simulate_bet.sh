@@ -26,3 +26,6 @@ for ((i=1;i<=rounds;i++));do # printing all 100 blocks
 done
 
 ./balance.sh # print balances after 100 rounds
+
+gamed q lottery list-bet # query all bets in all rounds and show status of each bet
+

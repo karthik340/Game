@@ -8,11 +8,12 @@ import (
 	"github.com/karthik340/game/x/lottery/types"
 )
 
-func validateBet(msg *types.MsgPlaceBet) error {
+func (k Keeper) validateBet(ctx sdk.Context, msg *types.MsgPlaceBet) error {
+	params := k.GetParams(ctx)
 	// fee should be 5 token and bet size should be in between 1 and 100
-	if !msg.GetFee().IsEqual(sdk.NewCoin("token", sdk.NewInt(5))) ||
-		msg.GetBet().IsLT(sdk.NewCoin("token", sdk.NewInt(1))) ||
-		msg.GetBet().IsGTE(sdk.NewCoin("token", sdk.NewInt(101))) {
+	if !msg.GetFee().IsEqual(sdk.NewCoin("token", sdk.NewInt(int64(params.GetMinFee())))) ||
+		msg.GetBet().IsLT(sdk.NewCoin("token", sdk.NewInt(int64(params.GetMinBet())))) ||
+		msg.GetBet().IsGTE(sdk.NewCoin("token", sdk.NewInt(int64(params.MaxBet)))) {
 		return errors.New("bet should be between  1 and 100 and fee should be above 5")
 	}
 	return nil
@@ -91,7 +92,7 @@ func (k Keeper) AddBet(
 func (k msgServer) PlaceBet(goCtx context.Context, msg *types.MsgPlaceBet) (*types.MsgPlaceBetResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	err := validateBet(msg)
+	err := k.validateBet(ctx, msg)
 	if err != nil {
 		return nil, err
 	}

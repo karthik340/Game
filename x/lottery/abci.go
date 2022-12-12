@@ -13,7 +13,7 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 		bets := k.GetBetsByRound(ctx, round)
 		txnCount, _ := k.GetTxnCounter(ctx)
 
-		if txnCount.Val >= 10 { // if number of txns are greater than equal to 10 then pick winner
+		if txnCount.Val >= k.MinTxn(ctx) { // if number of txns are greater than equal to 10 then pick winner
 			winnerIndex := k.GetWinnerIndex(bets, txnCount.Val, round.Val)
 			winner, _ := k.GetBetByTxNumberInCurrentRound(ctx, round, winnerIndex)
 
