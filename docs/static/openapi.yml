@@ -47696,6 +47696,8 @@ definitions:
         format: uint64
       status:
         type: boolean
+  game.lottery.MsgPlaceBetResponse:
+    type: object
   game.lottery.Params:
     type: object
     properties:

@@ -20,6 +20,8 @@ export interface LotteryBet {
   status?: boolean;
 }
 
+export type LotteryMsgPlaceBetResponse = object;
+
 /**
  * Params defines the parameters for the module.
  */

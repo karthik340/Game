@@ -7,7 +7,17 @@ option go_package = "game/x/lottery/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc PlaceBet(MsgPlaceBet) returns (MsgPlaceBetResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgPlaceBet {
+  string creator = 1;
+  string fee = 2;
+  string bet = 3;
+}
+
+message MsgPlaceBetResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
