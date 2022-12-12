@@ -19834,6 +19834,55 @@ paths:
           format: int64
       tags:
         - Query
+  /game/lottery/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: GameLotteryParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+                properties:
+                  minFee:
+                    type: string
+                    format: uint64
+                  minBet:
+                    type: string
+                    format: uint64
+                  maxBet:
+                    type: string
+                    format: uint64
+                  minTxn:
+                    type: string
+                    format: uint64
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   /ibc/apps/interchain_accounts/controller/v1/params:
     get:
       summary: Params queries all parameters of the ICA controller submodule.
@@ -47385,6 +47434,42 @@ definitions:
     description: >-
       MsgCreateVestingAccountResponse defines the Msg/CreateVestingAccount
       response type.
+  game.lottery.Params:
+    type: object
+    properties:
+      minFee:
+        type: string
+        format: uint64
+      minBet:
+        type: string
+        format: uint64
+      maxBet:
+        type: string
+        format: uint64
+      minTxn:
+        type: string
+        format: uint64
+    description: Params defines the parameters for the module.
+  game.lottery.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+        properties:
+          minFee:
+            type: string
+            format: uint64
+          minBet:
+            type: string
+            format: uint64
+          maxBet:
+            type: string
+            format: uint64
+          minTxn:
+            type: string
+            format: uint64
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
   ibc.applications.interchain_accounts.controller.v1.Params:
     type: object
     properties:
