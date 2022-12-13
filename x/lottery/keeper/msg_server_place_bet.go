@@ -69,7 +69,7 @@ func (k Keeper) AddBet(
 	txnCounter, _ := k.GetTxnCounter(ctx)
 
 	var user = types.Bet{
-		Sender: msg.Creator,
+		Sender: msg.Sender,
 		Fee:    msg.Fee,
 		Bet:    msg.Bet,
 		TxNum:  txnCounter.Val,
@@ -97,7 +97,7 @@ func (k msgServer) PlaceBet(goCtx context.Context, msg *types.MsgPlaceBet) (*typ
 		return nil, err
 	}
 
-	sender, err := sdk.AccAddressFromBech32(msg.Creator)
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +105,7 @@ func (k msgServer) PlaceBet(goCtx context.Context, msg *types.MsgPlaceBet) (*typ
 	// Check if user bet already exists for current round
 	existingBet, betExists := k.GetBetInCurrentRound(
 		ctx,
-		msg.Creator,
+		msg.Sender,
 	)
 
 	if betExists {

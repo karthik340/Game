@@ -19,7 +19,7 @@ func SimulateMsgPlaceBet(
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		msg := &types.MsgPlaceBet{
-			Creator: simAccount.Address.String(),
+			Sender: simAccount.Address.String(),
 		}
 
 		// TODO: Handling the PlaceBet simulation

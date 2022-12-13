@@ -9,11 +9,11 @@ const TypeMsgPlaceBet = "place_bet"
 
 var _ sdk.Msg = &MsgPlaceBet{}
 
-func NewMsgPlaceBet(creator string, fee sdk.Coin, bet sdk.Coin) *MsgPlaceBet {
+func NewMsgPlaceBet(sender string, fee sdk.Coin, bet sdk.Coin) *MsgPlaceBet {
 	return &MsgPlaceBet{
-		Creator: creator,
-		Fee:     fee,
-		Bet:     bet,
+		Sender: sender,
+		Fee:    fee,
+		Bet:    bet,
 	}
 }
 
@@ -26,7 +26,7 @@ func (msg *MsgPlaceBet) Type() string {
 }
 
 func (msg *MsgPlaceBet) GetSigners() []sdk.AccAddress {
-	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	creator, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		panic(err)
 	}
@@ -39,7 +39,7 @@ func (msg *MsgPlaceBet) GetSignBytes() []byte {
 }
 
 func (msg *MsgPlaceBet) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}

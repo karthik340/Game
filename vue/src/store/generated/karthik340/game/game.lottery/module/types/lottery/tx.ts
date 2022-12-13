@@ -5,19 +5,19 @@ import { Coin } from "../cosmos/base/v1beta1/coin";
 export const protobufPackage = "game.lottery";
 
 export interface MsgPlaceBet {
-  creator: string;
+  sender: string;
   fee: Coin | undefined;
   bet: Coin | undefined;
 }
 
 export interface MsgPlaceBetResponse {}
 
-const baseMsgPlaceBet: object = { creator: "" };
+const baseMsgPlaceBet: object = { sender: "" };
 
 export const MsgPlaceBet = {
   encode(message: MsgPlaceBet, writer: Writer = Writer.create()): Writer {
-    if (message.creator !== "") {
-      writer.uint32(10).string(message.creator);
+    if (message.sender !== "") {
+      writer.uint32(10).string(message.sender);
     }
     if (message.fee !== undefined) {
       Coin.encode(message.fee, writer.uint32(18).fork()).ldelim();
@@ -36,7 +36,7 @@ export const MsgPlaceBet = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.creator = reader.string();
+          message.sender = reader.string();
           break;
         case 2:
           message.fee = Coin.decode(reader, reader.uint32());
@@ -54,10 +54,10 @@ export const MsgPlaceBet = {
 
   fromJSON(object: any): MsgPlaceBet {
     const message = { ...baseMsgPlaceBet } as MsgPlaceBet;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
+    if (object.sender !== undefined && object.sender !== null) {
+      message.sender = String(object.sender);
     } else {
-      message.creator = "";
+      message.sender = "";
     }
     if (object.fee !== undefined && object.fee !== null) {
       message.fee = Coin.fromJSON(object.fee);
@@ -74,7 +74,7 @@ export const MsgPlaceBet = {
 
   toJSON(message: MsgPlaceBet): unknown {
     const obj: any = {};
-    message.creator !== undefined && (obj.creator = message.creator);
+    message.sender !== undefined && (obj.sender = message.sender);
     message.fee !== undefined &&
       (obj.fee = message.fee ? Coin.toJSON(message.fee) : undefined);
     message.bet !== undefined &&
@@ -84,10 +84,10 @@ export const MsgPlaceBet = {
 
   fromPartial(object: DeepPartial<MsgPlaceBet>): MsgPlaceBet {
     const message = { ...baseMsgPlaceBet } as MsgPlaceBet;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
+    if (object.sender !== undefined && object.sender !== null) {
+      message.sender = object.sender;
     } else {
-      message.creator = "";
+      message.sender = "";
     }
     if (object.fee !== undefined && object.fee !== null) {
       message.fee = Coin.fromPartial(object.fee);

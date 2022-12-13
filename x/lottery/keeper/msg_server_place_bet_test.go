@@ -65,9 +65,9 @@ func getAddresses(
 
 func getBet(creator string, fee, bet int64) *types.MsgPlaceBet {
 	return &types.MsgPlaceBet{
-		Creator: creator,
-		Fee:     sdk.NewCoin("token", sdk.NewInt(fee)),
-		Bet:     sdk.NewCoin("token", sdk.NewInt(bet)),
+		Sender: creator,
+		Fee:    sdk.NewCoin("token", sdk.NewInt(fee)),
+		Bet:    sdk.NewCoin("token", sdk.NewInt(bet)),
 	}
 }
 

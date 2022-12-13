@@ -15,7 +15,7 @@ service Msg {
 }
 
 message MsgPlaceBet {
-  string creator = 1;
+  string sender = 1;
   cosmos.base.v1beta1.Coin fee = 2
   [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coin"];
 
