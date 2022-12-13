@@ -26,7 +26,7 @@ var (
 	ExampleHeight = int64(1111)
 )
 
-func LotteryKeeper(t testing.TB) (*keeper.Keeper, types.BankKeeper, types.AccountKeeper, sdk.Context) {
+func LotteryKeeper(t testing.TB, header *tmproto.Header) (*keeper.Keeper, types.BankKeeper, types.AccountKeeper, sdk.Context) {
 	initializer := newInitializer()
 	storeKey := sdk.NewKVStoreKey(types.StoreKey)
 	memStoreKey := storetypes.NewMemoryStoreKey(types.MemStoreKey)
@@ -53,10 +53,16 @@ func LotteryKeeper(t testing.TB) (*keeper.Keeper, types.BankKeeper, types.Accoun
 	bankKeeper := initializer.Bank(paramKeeper, authKeeper)
 	require.NoError(t, stateStore.LoadLatestVersion())
 
-	ctx := sdk.NewContext(stateStore, tmproto.Header{
+	testHeader := tmproto.Header{
 		Time:   ExampleTimestamp,
 		Height: ExampleHeight,
-	}, false, log.NewNopLogger())
+	}
+
+	if header != nil {
+		testHeader = *header
+	}
+
+	ctx := sdk.NewContext(stateStore, testHeader, false, log.NewNopLogger())
 
 	k := keeper.NewKeeper(
 		cdc,

@@ -32,7 +32,7 @@ func TestGenesis(t *testing.T) {
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
-	k, _, _, ctx := keepertest.LotteryKeeper(t)
+	k, _, _, ctx := keepertest.LotteryKeeper(t, nil)
 	lottery.InitGenesis(ctx, *k, genesisState)
 	got := lottery.ExportGenesis(ctx, *k)
 	require.NotNil(t, got)

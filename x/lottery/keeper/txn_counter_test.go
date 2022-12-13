@@ -20,7 +20,7 @@ func createTestTxnCounter(keeper *keeper.Keeper, ctx sdk.Context) types.TxnCount
 }
 
 func TestTxnCounterGet(t *testing.T) {
-	keeper, _, _, ctx := keepertest.LotteryKeeper(t)
+	keeper, _, _, ctx := keepertest.LotteryKeeper(t, nil)
 	item := createTestTxnCounter(keeper, ctx)
 	rst, found := keeper.GetTxnCounter(ctx)
 	require.True(t, found)

@@ -7,8 +7,8 @@ import (
 
 type Bets []types.Bet
 
-// returns highest and lowest bet
-func (b Bets) getHighAndLowBets() (sdk.Int, sdk.Int) {
+// GetHighAndLowBets returns highest and lowest bet
+func (b Bets) GetHighAndLowBets() (sdk.Int, sdk.Int) {
 	high := sdk.NewInt(0)
 	low := sdk.NewInt(100)
 
@@ -20,8 +20,8 @@ func (b Bets) getHighAndLowBets() (sdk.Int, sdk.Int) {
 	return high, low
 }
 
-// returns sum of all bets and fee
-func (b Bets) getTotalBetSizeAndFee(denom string) (sdk.Coin, sdk.Coin) {
+// GetTotalBetSizeAndFee returns sum of all bets and fee
+func (b Bets) GetTotalBetSizeAndFee(denom string) (sdk.Coin, sdk.Coin) {
 	fee := sdk.NewInt(0)
 	totalBet := sdk.NewInt(0)
 

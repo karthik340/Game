@@ -17,13 +17,13 @@ func TestMsgPlaceBet_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid address",
 			msg: MsgPlaceBet{
-				Creator: "invalid_address",
+				Sender: "invalid_address",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		}, {
 			name: "valid address",
 			msg: MsgPlaceBet{
-				Creator: sample.AccAddress(),
+				Sender: sample.AccAddress(),
 			},
 		},
 	}

@@ -20,7 +20,7 @@ import (
 var _ = strconv.IntSize
 
 func TestBetQuerySingle(t *testing.T) {
-	keeper, _, _, ctx := keepertest.LotteryKeeper(t)
+	keeper, _, _, ctx := keepertest.LotteryKeeper(t, nil)
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNBet(keeper, ctx, 2)
 	for _, tc := range []struct {
@@ -71,7 +71,7 @@ func TestBetQuerySingle(t *testing.T) {
 }
 
 func TestBetQueryPaginated(t *testing.T) {
-	keeper, _, _, ctx := keepertest.LotteryKeeper(t)
+	keeper, _, _, ctx := keepertest.LotteryKeeper(t, nil)
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNBet(keeper, ctx, 5)
 

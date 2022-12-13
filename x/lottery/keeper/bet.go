@@ -26,13 +26,13 @@ func (k Keeper) SetBetInCurrentRound(ctx sdk.Context, bet types.Bet) {
 }
 
 // GetBetInCurrentRound returns a bet by given sender in current round
-func (k Keeper) GetBetInCurrentRound(
-	ctx sdk.Context,
-	sender string,
-) (val types.Bet, found bool) {
-	round, _ := k.GetRound(ctx)
-	store := ctx.KVStore(k.storeKey)
-	key := types.BetKey(round, sender)
+func (k Keeper) GetBetInCurrentRound(ctx sdk.Context, sender string) (val types.Bet, found bool) {
+
+	var (
+		round, _ = k.GetRound(ctx)
+		store    = ctx.KVStore(k.storeKey)
+		key      = types.BetKey(round, sender)
+	)
 	rawBytes := store.Get(key)
 	if rawBytes == nil {
 		return
@@ -74,9 +74,11 @@ func (k Keeper) GetAllBet(ctx sdk.Context) (list []types.Bet) {
 
 // GetBetsByRound return bets in given round
 func (k Keeper) GetBetsByRound(ctx sdk.Context, round types.Round) Bets {
-	key := types.GetBetKeyWithRound(round)
-	store := ctx.KVStore(k.storeKey)
-	iterator := sdk.KVStorePrefixIterator(store, key)
+	var (
+		key      = types.GetBetKeyWithRound(round)
+		store    = ctx.KVStore(k.storeKey)
+		iterator = sdk.KVStorePrefixIterator(store, key)
+	)
 
 	defer iterator.Close()
 
@@ -91,12 +93,14 @@ func (k Keeper) GetBetsByRound(ctx sdk.Context, round types.Round) Bets {
 	return list
 }
 
-// GetBetByTxNumberInCurrentRound returns bet of n th transaction in the given round
-func (k Keeper) GetBetByTxNumberInCurrentRound(ctx sdk.Context, round types.Round, txNum uint64) (types.Bet, bool) {
+// GetBetByTxNumber returns bet of n th transaction in the given round
+func (k Keeper) GetBetByTxNumber(ctx sdk.Context, round types.Round, txNum uint64) (types.Bet, bool) {
 	fmt.Println("tx num", txNum)
-	key := types.GetBetKeyWithRound(round)
-	store := ctx.KVStore(k.storeKey)
-	iterator := sdk.KVStorePrefixIterator(store, key)
+	var (
+		key      = types.GetBetKeyWithRound(round)
+		store    = ctx.KVStore(k.storeKey)
+		iterator = sdk.KVStorePrefixIterator(store, key)
+	)
 
 	defer iterator.Close()
 
@@ -114,6 +118,35 @@ func (k Keeper) GetBetByTxNumberInCurrentRound(ctx sdk.Context, round types.Roun
 	return types.Bet{}, false
 }
 
+// SetWinner sets the winner in given round
+func (k Keeper) SetWinner(ctx sdk.Context, round types.Round, winner string) {
+	store := ctx.KVStore(k.storeKey)
+	b := k.cdc.MustMarshal(&types.Winner{
+		Winner: winner,
+	})
+
+	key := types.WinnerKey(
+		round,
+	)
+
+	store.Set(key, b)
+}
+
+// GetWinner gets the winner in given round
+func (k Keeper) GetWinner(ctx sdk.Context, round types.Round) (val types.Winner, found bool) {
+	var (
+		store    = ctx.KVStore(k.storeKey)
+		key      = types.WinnerKey(round)
+		rawBytes = store.Get(key)
+	)
+	if rawBytes == nil {
+		return
+	}
+
+	k.cdc.MustUnmarshal(rawBytes, &val)
+	return val, true
+}
+
 // MarshalBets serializes bets and return bytes
 func (k Keeper) MarshalBets(bets []types.Bet) []byte {
 	var bytes []byte
@@ -125,8 +158,8 @@ func (k Keeper) MarshalBets(bets []types.Bet) []byte {
 
 // PayWinner pays the winner based on winner's bet size
 func (k Keeper) PayWinner(ctx sdk.Context, winner types.Bet, bets Bets) {
-	highestBet, lowestBet := bets.getHighAndLowBets()
-	totalBet, totalFee := bets.getTotalBetSizeAndFee(winner.Bet.Denom)
+	highestBet, lowestBet := bets.GetHighAndLowBets()
+	totalBet, totalFee := bets.GetTotalBetSizeAndFee(winner.Bet.Denom)
 
 	winnerAddr, err := sdk.AccAddressFromBech32(winner.Sender)
 	if err != nil {

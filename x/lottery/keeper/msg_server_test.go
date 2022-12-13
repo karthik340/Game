@@ -11,6 +11,6 @@ import (
 )
 
 func setupMsgServer(t testing.TB) (types.MsgServer, context.Context) {
-	k, _, _, ctx := keepertest.LotteryKeeper(t)
+	k, _, _, ctx := keepertest.LotteryKeeper(t, nil)
 	return keeper.NewMsgServerImpl(*k), sdk.WrapSDKContext(ctx)
 }

@@ -13,6 +13,10 @@ export interface Bet {
   txNum: number;
 }
 
+export interface Winner {
+  winner: string;
+}
+
 const baseBet: object = { sender: "", status: false, txNum: 0 };
 
 export const Bet = {
@@ -133,6 +137,61 @@ export const Bet = {
       message.txNum = object.txNum;
     } else {
       message.txNum = 0;
+    }
+    return message;
+  },
+};
+
+const baseWinner: object = { winner: "" };
+
+export const Winner = {
+  encode(message: Winner, writer: Writer = Writer.create()): Writer {
+    if (message.winner !== "") {
+      writer.uint32(10).string(message.winner);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): Winner {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseWinner } as Winner;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.winner = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Winner {
+    const message = { ...baseWinner } as Winner;
+    if (object.winner !== undefined && object.winner !== null) {
+      message.winner = String(object.winner);
+    } else {
+      message.winner = "";
+    }
+    return message;
+  },
+
+  toJSON(message: Winner): unknown {
+    const obj: any = {};
+    message.winner !== undefined && (obj.winner = message.winner);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<Winner>): Winner {
+    const message = { ...baseWinner } as Winner;
+    if (object.winner !== undefined && object.winner !== null) {
+      message.winner = object.winner;
+    } else {
+      message.winner = "";
     }
     return message;
   },

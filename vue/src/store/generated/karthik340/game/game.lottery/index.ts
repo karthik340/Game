@@ -1,12 +1,13 @@
 import { txClient, queryClient, MissingWalletError , registry} from './module'
 
 import { Bet } from "./module/types/lottery/bet"
+import { Winner } from "./module/types/lottery/bet"
 import { Params } from "./module/types/lottery/params"
 import { Round } from "./module/types/lottery/round"
 import { TxnCounter } from "./module/types/lottery/txn_counter"
 
 
-export { Bet, Params, Round, TxnCounter };
+export { Bet, Winner, Params, Round, TxnCounter };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -49,9 +50,11 @@ const getDefaultState = () => {
 				TxnCounter: {},
 				Bet: {},
 				BetAll: {},
+				GetWinnerByRound: {},
 				
 				_Structure: {
 						Bet: getStructure(Bet.fromPartial({})),
+						Winner: getStructure(Winner.fromPartial({})),
 						Params: getStructure(Params.fromPartial({})),
 						Round: getStructure(Round.fromPartial({})),
 						TxnCounter: getStructure(TxnCounter.fromPartial({})),
@@ -112,6 +115,12 @@ export default {
 						(<any> params).query=null
 					}
 			return state.BetAll[JSON.stringify(params)] ?? {}
+		},
+				getGetWinnerByRound: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.GetWinnerByRound[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -256,6 +265,28 @@ export default {
 				return getters['getBetAll']( { params: {...key}, query}) ?? {}
 			} catch (e) {
 				throw new Error('QueryClient:QueryBetAll API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryGetWinnerByRound({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryGetWinnerByRound( key.round)).data
+				
+					
+				commit('QUERY', { query: 'GetWinnerByRound', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryGetWinnerByRound', payload: { options: { all }, params: {...key},query }})
+				return getters['getGetWinnerByRound']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryGetWinnerByRound API Node Unavailable. Could not perform query: ' + e.message)
 				
 			}
 		},

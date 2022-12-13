@@ -36,6 +36,11 @@ service Query {
 		option (google.api.http).get = "/game/lottery/bet";
 	}
 
+// Queries a list of GetWinnerByRound items.
+	rpc GetWinnerByRound(QueryGetWinnerByRoundRequest) returns (QueryGetWinnerByRoundResponse) {
+		option (google.api.http).get = "/karthik340/game/lottery/get_winner_by_round/{round}";
+	}
+
 // this line is used by starport scaffolding # 2
 }
 
@@ -74,6 +79,14 @@ message QueryAllBetRequest {
 message QueryAllBetResponse {
 	repeated Bet bet = 1 [(gogoproto.nullable) = false];
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetWinnerByRoundRequest {
+  uint64 round = 1;
+}
+
+message QueryGetWinnerByRoundResponse {
+  string winner = 1;
 }
 
 // this line is used by starport scaffolding # 3

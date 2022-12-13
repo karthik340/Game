@@ -24,7 +24,7 @@ var (
 var (
 	KeyMaxBet = []byte("MaxBet")
 	// TODO: Determine the default value
-	DefaultMaxBet uint64 = 100
+	DefaultMaxBet uint64 = 101
 )
 
 var (

@@ -79,6 +79,10 @@ export interface LotteryQueryGetTxnCounterResponse {
   TxnCounter?: LotteryTxnCounter;
 }
 
+export interface LotteryQueryGetWinnerByRoundResponse {
+  winner?: string;
+}
+
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
@@ -463,6 +467,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryTxnCounter = (params: RequestParams = {}) =>
     this.request<LotteryQueryGetTxnCounterResponse, RpcStatus>({
       path: `/game/lottery/txn_counter`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryGetWinnerByRound
+   * @summary Queries a list of GetWinnerByRound items.
+   * @request GET:/karthik340/game/lottery/get_winner_by_round/{round}
+   */
+  queryGetWinnerByRound = (round: string, params: RequestParams = {}) =>
+    this.request<LotteryQueryGetWinnerByRoundResponse, RpcStatus>({
+      path: `/karthik340/game/lottery/get_winner_by_round/${round}`,
       method: "GET",
       format: "json",
       ...params,

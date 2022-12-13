@@ -1,5 +1,6 @@
 /* eslint-disable */
-import { Reader, Writer } from "protobufjs/minimal";
+import { Reader, util, configure, Writer } from "protobufjs/minimal";
+import * as Long from "long";
 import { Params } from "../lottery/params";
 import { Round } from "../lottery/round";
 import { TxnCounter } from "../lottery/txn_counter";
@@ -47,6 +48,14 @@ export interface QueryAllBetRequest {
 export interface QueryAllBetResponse {
   bet: Bet[];
   pagination: PageResponse | undefined;
+}
+
+export interface QueryGetWinnerByRoundRequest {
+  round: number;
+}
+
+export interface QueryGetWinnerByRoundResponse {
+  winner: string;
 }
 
 const baseQueryParamsRequest: object = {};
@@ -635,6 +644,144 @@ export const QueryAllBetResponse = {
   },
 };
 
+const baseQueryGetWinnerByRoundRequest: object = { round: 0 };
+
+export const QueryGetWinnerByRoundRequest = {
+  encode(
+    message: QueryGetWinnerByRoundRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.round !== 0) {
+      writer.uint32(8).uint64(message.round);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetWinnerByRoundRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetWinnerByRoundRequest,
+    } as QueryGetWinnerByRoundRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.round = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetWinnerByRoundRequest {
+    const message = {
+      ...baseQueryGetWinnerByRoundRequest,
+    } as QueryGetWinnerByRoundRequest;
+    if (object.round !== undefined && object.round !== null) {
+      message.round = Number(object.round);
+    } else {
+      message.round = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetWinnerByRoundRequest): unknown {
+    const obj: any = {};
+    message.round !== undefined && (obj.round = message.round);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetWinnerByRoundRequest>
+  ): QueryGetWinnerByRoundRequest {
+    const message = {
+      ...baseQueryGetWinnerByRoundRequest,
+    } as QueryGetWinnerByRoundRequest;
+    if (object.round !== undefined && object.round !== null) {
+      message.round = object.round;
+    } else {
+      message.round = 0;
+    }
+    return message;
+  },
+};
+
+const baseQueryGetWinnerByRoundResponse: object = { winner: "" };
+
+export const QueryGetWinnerByRoundResponse = {
+  encode(
+    message: QueryGetWinnerByRoundResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.winner !== "") {
+      writer.uint32(10).string(message.winner);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetWinnerByRoundResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetWinnerByRoundResponse,
+    } as QueryGetWinnerByRoundResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.winner = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetWinnerByRoundResponse {
+    const message = {
+      ...baseQueryGetWinnerByRoundResponse,
+    } as QueryGetWinnerByRoundResponse;
+    if (object.winner !== undefined && object.winner !== null) {
+      message.winner = String(object.winner);
+    } else {
+      message.winner = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetWinnerByRoundResponse): unknown {
+    const obj: any = {};
+    message.winner !== undefined && (obj.winner = message.winner);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetWinnerByRoundResponse>
+  ): QueryGetWinnerByRoundResponse {
+    const message = {
+      ...baseQueryGetWinnerByRoundResponse,
+    } as QueryGetWinnerByRoundResponse;
+    if (object.winner !== undefined && object.winner !== null) {
+      message.winner = object.winner;
+    } else {
+      message.winner = "";
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -649,6 +796,10 @@ export interface Query {
   Bet(request: QueryGetBetRequest): Promise<QueryGetBetResponse>;
   /** Queries a list of Bet items. */
   BetAll(request: QueryAllBetRequest): Promise<QueryAllBetResponse>;
+  /** Queries a list of GetWinnerByRound items. */
+  GetWinnerByRound(
+    request: QueryGetWinnerByRoundRequest
+  ): Promise<QueryGetWinnerByRoundResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -691,6 +842,20 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("game.lottery.Query", "BetAll", data);
     return promise.then((data) => QueryAllBetResponse.decode(new Reader(data)));
   }
+
+  GetWinnerByRound(
+    request: QueryGetWinnerByRoundRequest
+  ): Promise<QueryGetWinnerByRoundResponse> {
+    const data = QueryGetWinnerByRoundRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "game.lottery.Query",
+      "GetWinnerByRound",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetWinnerByRoundResponse.decode(new Reader(data))
+    );
+  }
 }
 
 interface Rpc {
@@ -700,6 +865,16 @@ interface Rpc {
     data: Uint8Array
   ): Promise<Uint8Array>;
 }
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
@@ -711,3 +886,15 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+if (util.Long !== Long) {
+  util.Long = Long as any;
+  configure();
+}

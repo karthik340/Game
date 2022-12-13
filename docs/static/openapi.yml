@@ -20186,6 +20186,44 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
+  '/karthik340/game/lottery/get_winner_by_round/{round}':
+    get:
+      summary: Queries a list of GetWinnerByRound items.
+      operationId: GameLotteryGetWinnerByRound
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              winner:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: round
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
   /ibc/apps/interchain_accounts/controller/v1/params:
     get:
       summary: Params queries all parameters of the ICA controller submodule.
@@ -47920,6 +47958,11 @@ definitions:
           val:
             type: string
             format: uint64
+  game.lottery.QueryGetWinnerByRoundResponse:
+    type: object
+    properties:
+      winner:
+        type: string
   game.lottery.QueryParamsResponse:
     type: object
     properties:

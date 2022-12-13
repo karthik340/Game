@@ -27,7 +27,7 @@ func createNBet(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.Bet {
 }
 
 func TestBetGet(t *testing.T) {
-	k, _, _, ctx := keepertest.LotteryKeeper(t)
+	k, _, _, ctx := keepertest.LotteryKeeper(t, nil)
 	items := createNBet(k, ctx, 10)
 	for _, item := range items {
 		rst, found := k.GetBetInCurrentRound(ctx,
@@ -42,7 +42,7 @@ func TestBetGet(t *testing.T) {
 }
 
 func TestBetGetAll(t *testing.T) {
-	k, _, _, ctx := keepertest.LotteryKeeper(t)
+	k, _, _, ctx := keepertest.LotteryKeeper(t, nil)
 	items := createNBet(k, ctx, 10)
 	require.ElementsMatch(t,
 		nullify.Fill(items),

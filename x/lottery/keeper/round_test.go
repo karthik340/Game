@@ -21,7 +21,7 @@ func createTestRound(keeper *keeper.Keeper, ctx sdk.Context) types.Round {
 }
 
 func TestRoundGet(t *testing.T) {
-	keeper, _, _, ctx := keepertest.LotteryKeeper(t)
+	keeper, _, _, ctx := keepertest.LotteryKeeper(t, nil)
 	item := createTestRound(keeper, ctx)
 	rst, found := keeper.GetRound(ctx)
 	require.True(t, found)

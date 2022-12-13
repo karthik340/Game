@@ -14,7 +14,7 @@ import (
 )
 
 func TestTxnCounterQuery(t *testing.T) {
-	keeper, _, _, ctx := keepertest.LotteryKeeper(t)
+	keeper, _, _, ctx := keepertest.LotteryKeeper(t, nil)
 	wctx := sdk.WrapSDKContext(ctx)
 	item := createTestTxnCounter(keeper, ctx)
 	for _, tc := range []struct {
