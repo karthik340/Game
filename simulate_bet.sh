@@ -27,5 +27,8 @@ done
 
 ./balance.sh # print balances after 100 rounds
 
-gamed q lottery list-bet # query all bets in all rounds and show status of each bet
+for ((i=0;i<rounds;i++));do # print winners of all 100 rounds
+  gamed q lottery get-winner-by-round $i
+done
+
 

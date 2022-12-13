@@ -16,8 +16,15 @@ func (k Keeper) GetWinnerByRound(goCtx context.Context, req *types.QueryGetWinne
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Process the query
-	_ = ctx
+	winner, found := k.GetWinner(ctx, types.Round{
+		Val: req.GetRound(),
+	})
 
-	return &types.QueryGetWinnerByRoundResponse{}, nil
+	if !found {
+		return &types.QueryGetWinnerByRoundResponse{}, nil
+	}
+
+	return &types.QueryGetWinnerByRoundResponse{
+		Winner: winner.Winner,
+	}, nil
 }
