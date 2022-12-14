@@ -31,7 +31,8 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 	cmd.AddCommand(CmdShowBet())
 	cmd.AddCommand(CmdGetWinnerByRound())
 
-	// this line is used by starport scaffolding # 1
+	cmd.AddCommand(CmdShowValidatorsWinner())
+// this line is used by starport scaffolding # 1
 
 	return cmd
 }

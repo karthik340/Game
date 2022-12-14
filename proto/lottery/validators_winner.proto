@@ -1,10 +1,9 @@
 syntax = "proto3";
 package karthik340.game.lottery;
 
-
 option go_package = "github.com/karthik340/game/x/lottery/types";
 
-message TxnCounter {
-  uint64 val = 1; 
+message ValidatorsWinner {
+  string winner = 1; 
   
 }

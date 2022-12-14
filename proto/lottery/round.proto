@@ -1,5 +1,6 @@
 syntax = "proto3";
-package game.lottery;
+package karthik340.game.lottery;
+
 
 option go_package = "github.com/karthik340/game/x/lottery/types";
 

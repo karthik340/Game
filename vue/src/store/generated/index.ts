@@ -22,6 +22,7 @@ import CosmosIbcGoIbcCoreConnectionV1 from './cosmos/ibc-go/ibc.core.connection.
 import CosmosIbcGoIbcCorePortV1 from './cosmos/ibc-go/ibc.core.port.v1'
 import GameGameLottery from './game/game.lottery'
 import Karthik340GameGameLottery from './karthik340/game/game.lottery'
+import Karthik340GameKarthik340GameLottery from './karthik340/game/karthik340.game.lottery'
 
 
 export default { 
@@ -47,6 +48,7 @@ export default {
   CosmosIbcGoIbcCorePortV1: load(CosmosIbcGoIbcCorePortV1, 'ibc.core.port.v1'),
   GameGameLottery: load(GameGameLottery, 'game.lottery'),
   Karthik340GameGameLottery: load(Karthik340GameGameLottery, 'game.lottery'),
+  Karthik340GameKarthik340GameLottery: load(Karthik340GameKarthik340GameLottery, 'karthik340.game.lottery'),
   
 }
 
