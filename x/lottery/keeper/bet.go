@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"fmt"
 	"github.com/ethereum/go-ethereum/crypto"
 	"math/big"
 
@@ -95,7 +94,6 @@ func (k Keeper) GetBetsByRound(ctx sdk.Context, round types.Round) Bets {
 
 // GetBetByTxNumber returns bet of n th transaction in the given round
 func (k Keeper) GetBetByTxNumber(ctx sdk.Context, round types.Round, txNum uint64) (types.Bet, bool) {
-	fmt.Println("tx num", txNum)
 	var (
 		key      = types.GetBetKeyWithRound(round)
 		store    = ctx.KVStore(k.storeKey)
@@ -104,12 +102,9 @@ func (k Keeper) GetBetByTxNumber(ctx sdk.Context, round types.Round, txNum uint6
 
 	defer iterator.Close()
 
-	fmt.Println(k.GetBetsByRound(ctx, types.Round{Val: 0}))
-
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Bet
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
-		fmt.Println("see ", val)
 		if val.TxNum == txNum {
 			return val, true
 		}
@@ -194,7 +189,6 @@ func (k Keeper) GetWinnerIndex(bets []types.Bet, txnCount uint64, round uint64) 
 	rawData = append(rawData, sdk.Uint64ToBigEndian(round)...) // append round so that there is randomness,
 	hash := crypto.Keccak256Hash(rawData)                      // in case there are same transactions as previous round,
 	num := new(big.Int).SetBytes(hash[16:]).Uint64()
-	fmt.Println("num txcount", num, txnCount)
 
 	return num % txnCount
 }

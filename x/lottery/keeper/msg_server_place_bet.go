@@ -3,8 +3,6 @@ package keeper
 import (
 	"context"
 	"errors"
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/karthik340/game/x/lottery/types"
 )
@@ -15,7 +13,7 @@ func (k Keeper) ValidateBet(ctx sdk.Context, msg *types.MsgPlaceBet) error {
 	if !msg.GetFee().IsEqual(sdk.NewCoin("token", sdk.NewInt(int64(params.GetMinFee())))) ||
 		msg.GetBet().IsLT(sdk.NewCoin("token", sdk.NewInt(int64(params.GetMinBet())))) ||
 		msg.GetBet().IsGTE(sdk.NewCoin("token", sdk.NewInt(int64(params.GetMaxBet())))) {
-		return types.BetValidationFailed
+		return types.ErrBetValidationFailed
 	}
 	return nil
 }
@@ -36,13 +34,12 @@ func (k Keeper) substituteBet(
 		return nil, errors.New("cannot send funds to user")
 	}
 
-	fmt.Println("sending to user ", existingUser.Bet.Add(existingUser.Fee))
 	totalAmount := msg.Fee.Add(msg.Bet)
-	fmt.Println("sending to mod ", totalAmount)
+
 	// send betSize+Fee from sender to module account
 	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(totalAmount))
 	if err != nil {
-		return nil, errors.New("insufficient funds")
+		return nil, types.ErrInsufficientFunds
 	}
 
 	// use same txNum as bet exists already
@@ -65,7 +62,7 @@ func (k Keeper) AddBet(
 
 	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.NewCoins(totalAmount))
 	if err != nil {
-		return nil, errors.New("insufficient funds")
+		return nil, types.ErrInsufficientFunds
 	}
 
 	txnCounter, _ := k.GetTxnCounter(ctx)

@@ -146,17 +146,17 @@ func TestValidate(t *testing.T) {
 		{
 			name:          "invalid fee",
 			msgPlacebet:   getBet(senders[0], 4, int64(100)),
-			expectedError: types.BetValidationFailed,
+			expectedError: types.ErrBetValidationFailed,
 		},
 		{
 			name:          "invalid max bet",
 			msgPlacebet:   getBet(senders[0], 5, int64(101)),
-			expectedError: types.BetValidationFailed,
+			expectedError: types.ErrBetValidationFailed,
 		},
 		{
 			name:          "invalid min bet",
 			msgPlacebet:   getBet(senders[0], 5, int64(0)),
-			expectedError: types.BetValidationFailed,
+			expectedError: types.ErrBetValidationFailed,
 		},
 		{
 			name:        "valid fee",
