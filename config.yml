@@ -57,5 +57,5 @@ faucet:
 init:
   config:
     consensus:
-      timeout_commit: "1s" # set timeout_commit to five minutes, timeout_commit helps in delaying time between blocks
+      timeout_commit: "300s" # set timeout_commit to five minutes, timeout_commit helps in delaying time between blocks
       # it tells how long we wait after committing block , before starting new height
