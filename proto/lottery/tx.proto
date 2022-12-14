@@ -1,0 +1,29 @@
+syntax = "proto3";
+package game.lottery;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+// this line is used by starport scaffolding # proto/tx/import
+
+option go_package = "github.com/karthik340/game/x/lottery/types";
+
+// Msg defines the Msg service.
+service Msg {
+      rpc PlaceBet(MsgPlaceBet) returns (MsgPlaceBetResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgPlaceBet {
+  string sender = 1;
+  cosmos.base.v1beta1.Coin fee = 2
+  [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+
+  cosmos.base.v1beta1.Coin bet = 3
+  [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+}
+
+message MsgPlaceBetResponse {
+}
+
+// this line is used by starport scaffolding # proto/tx/message
