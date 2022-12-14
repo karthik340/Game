@@ -196,6 +196,7 @@ gamed query bank balances $alice
 ```
 ./simulate_bet.sh
 ./balance.sh // use to know balances exclusively
+ gamed q lottery get-winner-by-round 0 // use to know winner of any round by providing round num 
 ```
 
 ## Strategies
