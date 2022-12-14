@@ -10,11 +10,18 @@ ignite chain serve
 `serve` command installs dependencies, builds, initializes, and starts your blockchain in development.
 
 ## Table of Contents
+* Environment
 * Problem statement explained
 * Code explained (How solution is approached)
 * Configuration
 * How to play lottery game (walk through)
 * Strategies
+
+## Environment
+* Ignite CLI version: v0.22.1
+* OS: darwin
+* arch: arm64
+* go version:  go version go1.19.3 darwin/amd64
 
 ## Problem statement explained
 ### Rules of Lottery 
