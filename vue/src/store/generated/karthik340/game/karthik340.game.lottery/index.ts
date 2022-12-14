@@ -310,9 +310,13 @@ export default {
 			try {
 				const key = params ?? {};
 				const queryClient=await initQueryClient(rootGetters)
-				let value= (await queryClient.queryValidatorsWinner()).data
+				let value= (await queryClient.queryValidatorsWinner(query)).data
 				
 					
+				while (all && (<any> value).pagination && (<any> value).pagination.next_key!=null) {
+					let next_values=(await queryClient.queryValidatorsWinner({...query, 'pagination.key':(<any> value).pagination.next_key})).data
+					value = mergeResults(value, next_values);
+				}
 				commit('QUERY', { query: 'ValidatorsWinner', key: { params: {...key}, query}, value })
 				if (subscribe) commit('SUBSCRIBE', { action: 'QueryValidatorsWinner', payload: { options: { all }, params: {...key},query }})
 				return getters['getValidatorsWinner']( { params: {...key}, query}) ?? {}
@@ -338,6 +342,21 @@ export default {
 				}
 			}
 		},
+		async sendMsgSetWinner({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgSetWinner(value)
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
+	gas: "200000" }, memo})
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgSetWinner:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgSetWinner:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
 		
 		async MsgPlaceBet({ rootGetters }, { value }) {
 			try {
@@ -349,6 +368,19 @@ export default {
 					throw new Error('TxClient:MsgPlaceBet:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgPlaceBet:Create Could not create message: ' + e.message)
+				}
+			}
+		},
+		async MsgSetWinner({ rootGetters }, { value }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgSetWinner(value)
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgSetWinner:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgSetWinner:Create Could not create message: ' + e.message)
 				}
 			}
 		},

@@ -18,6 +18,6 @@ message GenesisState {
   Round round = 2;
   TxnCounter txnCounter = 3;
   repeated Bet betList = 4 [(gogoproto.nullable) = false];
-  ValidatorsWinner validatorsWinner = 5;
+  repeated ValidatorsWinner validatorsWinner = 5;
   // this line is used by starport scaffolding # genesis/proto/state
 }

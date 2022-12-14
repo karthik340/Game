@@ -25,11 +25,11 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // GenesisState defines the lottery module's genesis state.
 type GenesisState struct {
-	Params           Params            `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
-	Round            *Round            `protobuf:"bytes,2,opt,name=round,proto3" json:"round,omitempty"`
-	TxnCounter       *TxnCounter       `protobuf:"bytes,3,opt,name=txnCounter,proto3" json:"txnCounter,omitempty"`
-	BetList          []Bet             `protobuf:"bytes,4,rep,name=betList,proto3" json:"betList"`
-	ValidatorsWinner *ValidatorsWinner `protobuf:"bytes,5,opt,name=validatorsWinner,proto3" json:"validatorsWinner,omitempty"`
+	Params           Params              `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
+	Round            *Round              `protobuf:"bytes,2,opt,name=round,proto3" json:"round,omitempty"`
+	TxnCounter       *TxnCounter         `protobuf:"bytes,3,opt,name=txnCounter,proto3" json:"txnCounter,omitempty"`
+	BetList          []Bet               `protobuf:"bytes,4,rep,name=betList,proto3" json:"betList"`
+	ValidatorsWinner []*ValidatorsWinner `protobuf:"bytes,5,rep,name=validatorsWinner,proto3" json:"validatorsWinner,omitempty"`
 }
 
 func (m *GenesisState) Reset()         { *m = GenesisState{} }
@@ -93,7 +93,7 @@ func (m *GenesisState) GetBetList() []Bet {
 	return nil
 }
 
-func (m *GenesisState) GetValidatorsWinner() *ValidatorsWinner {
+func (m *GenesisState) GetValidatorsWinner() []*ValidatorsWinner {
 	if m != nil {
 		return m.ValidatorsWinner
 	}
@@ -124,12 +124,12 @@ var fileDescriptor_ee49847bb280688d = []byte{
 	0xeb, 0x66, 0x14, 0x8d, 0x53, 0xe9, 0x60, 0xed, 0x0a, 0x12, 0xb3, 0xd3, 0x46, 0x08, 0xa6, 0xbc,
 	0x9d, 0xfc, 0xc6, 0xcd, 0x2a, 0xf4, 0x24, 0x15, 0xbd, 0xdf, 0x58, 0x83, 0x1f, 0x98, 0x73, 0x81,
 	0xfe, 0x85, 0x14, 0x6e, 0x58, 0x0c, 0x6e, 0xae, 0x9a, 0xad, 0x15, 0xeb, 0x47, 0xa9, 0x09, 0x2d,
-	0x0a, 0xba, 0xb7, 0x41, 0x9c, 0x07, 0xb4, 0xb3, 0x9d, 0xd1, 0x93, 0x1a, 0x91, 0x9b, 0x57, 0x45,
-	0x4e, 0x53, 0x63, 0x1e, 0x7f, 0x01, 0xc1, 0x9f, 0x88, 0xd6, 0xd5, 0x7c, 0x89, 0xed, 0xc5, 0x12,
-	0xdb, 0x5f, 0x4b, 0x6c, 0xbf, 0xad, 0xb0, 0xb5, 0x58, 0x61, 0xeb, 0x7d, 0x85, 0xad, 0xe7, 0xb3,
-	0x88, 0x41, 0x7f, 0x12, 0x7a, 0x5d, 0x31, 0xf2, 0xb7, 0x0f, 0xf8, 0xeb, 0x07, 0xfc, 0xa9, 0xbf,
-	0xd9, 0xf2, 0x6c, 0x4c, 0xe3, 0xb0, 0xa0, 0x96, 0xd5, 0xf8, 0x0e, 0x00, 0x00, 0xff, 0xff, 0xd2,
-	0x31, 0x63, 0x01, 0x6e, 0x02, 0x00, 0x00,
+	0x0a, 0xba, 0xb7, 0x41, 0x9c, 0x07, 0xb4, 0xb3, 0x9d, 0xd1, 0x93, 0x1a, 0x91, 0x9b, 0x57, 0x31,
+	0xa7, 0xa9, 0x31, 0x8f, 0xbf, 0x80, 0xe0, 0x4f, 0x44, 0xeb, 0x6a, 0xbe, 0xc4, 0xf6, 0x62, 0x89,
+	0xed, 0xaf, 0x25, 0xb6, 0xdf, 0x56, 0xd8, 0x5a, 0xac, 0xb0, 0xf5, 0xbe, 0xc2, 0xd6, 0xf3, 0x59,
+	0xc4, 0xa0, 0x3f, 0x09, 0xbd, 0xae, 0x18, 0xf9, 0xdb, 0x07, 0xfc, 0xf5, 0x03, 0xfe, 0xd4, 0xdf,
+	0x6c, 0x79, 0x36, 0xa6, 0x71, 0x58, 0x50, 0xcb, 0x6a, 0x7c, 0x07, 0x00, 0x00, 0xff, 0xff, 0xfc,
+	0x9e, 0x4c, 0xae, 0x6e, 0x02, 0x00, 0x00,
 }
 
 func (m *GenesisState) Marshal() (dAtA []byte, err error) {
@@ -152,17 +152,19 @@ func (m *GenesisState) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.ValidatorsWinner != nil {
-		{
-			size, err := m.ValidatorsWinner.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
+	if len(m.ValidatorsWinner) > 0 {
+		for iNdEx := len(m.ValidatorsWinner) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ValidatorsWinner[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGenesis(dAtA, i, uint64(size))
 			}
-			i -= size
-			i = encodeVarintGenesis(dAtA, i, uint64(size))
+			i--
+			dAtA[i] = 0x2a
 		}
-		i--
-		dAtA[i] = 0x2a
 	}
 	if len(m.BetList) > 0 {
 		for iNdEx := len(m.BetList) - 1; iNdEx >= 0; iNdEx-- {
@@ -248,9 +250,11 @@ func (m *GenesisState) Size() (n int) {
 			n += 1 + l + sovGenesis(uint64(l))
 		}
 	}
-	if m.ValidatorsWinner != nil {
-		l = m.ValidatorsWinner.Size()
-		n += 1 + l + sovGenesis(uint64(l))
+	if len(m.ValidatorsWinner) > 0 {
+		for _, e := range m.ValidatorsWinner {
+			l = e.Size()
+			n += 1 + l + sovGenesis(uint64(l))
+		}
 	}
 	return n
 }
@@ -458,10 +462,8 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.ValidatorsWinner == nil {
-				m.ValidatorsWinner = &ValidatorsWinner{}
-			}
-			if err := m.ValidatorsWinner.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.ValidatorsWinner = append(m.ValidatorsWinner, &ValidatorsWinner{})
+			if err := m.ValidatorsWinner[len(m.ValidatorsWinner)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

@@ -95,7 +95,9 @@ message QueryGetWinnerByRoundResponse {
   string winner = 1;
 }
 
-message QueryGetValidatorsWinnerRequest {}
+message QueryGetValidatorsWinnerRequest {
+	string validator = 1;
+}
 
 message QueryGetValidatorsWinnerResponse {
 	ValidatorsWinner ValidatorsWinner = 1 [(gogoproto.nullable) = false];

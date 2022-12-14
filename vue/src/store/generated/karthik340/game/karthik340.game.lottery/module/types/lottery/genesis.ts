@@ -15,7 +15,7 @@ export interface GenesisState {
   txnCounter: TxnCounter | undefined;
   betList: Bet[];
   /** this line is used by starport scaffolding # genesis/proto/state */
-  validatorsWinner: ValidatorsWinner | undefined;
+  validatorsWinner: ValidatorsWinner[];
 }
 
 const baseGenesisState: object = {};
@@ -34,11 +34,8 @@ export const GenesisState = {
     for (const v of message.betList) {
       Bet.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    if (message.validatorsWinner !== undefined) {
-      ValidatorsWinner.encode(
-        message.validatorsWinner,
-        writer.uint32(42).fork()
-      ).ldelim();
+    for (const v of message.validatorsWinner) {
+      ValidatorsWinner.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -48,6 +45,7 @@ export const GenesisState = {
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseGenesisState } as GenesisState;
     message.betList = [];
+    message.validatorsWinner = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -64,9 +62,8 @@ export const GenesisState = {
           message.betList.push(Bet.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.validatorsWinner = ValidatorsWinner.decode(
-            reader,
-            reader.uint32()
+          message.validatorsWinner.push(
+            ValidatorsWinner.decode(reader, reader.uint32())
           );
           break;
         default:
@@ -80,6 +77,7 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     const message = { ...baseGenesisState } as GenesisState;
     message.betList = [];
+    message.validatorsWinner = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromJSON(object.params);
     } else {
@@ -104,11 +102,9 @@ export const GenesisState = {
       object.validatorsWinner !== undefined &&
       object.validatorsWinner !== null
     ) {
-      message.validatorsWinner = ValidatorsWinner.fromJSON(
-        object.validatorsWinner
-      );
-    } else {
-      message.validatorsWinner = undefined;
+      for (const e of object.validatorsWinner) {
+        message.validatorsWinner.push(ValidatorsWinner.fromJSON(e));
+      }
     }
     return message;
   },
@@ -128,16 +124,20 @@ export const GenesisState = {
     } else {
       obj.betList = [];
     }
-    message.validatorsWinner !== undefined &&
-      (obj.validatorsWinner = message.validatorsWinner
-        ? ValidatorsWinner.toJSON(message.validatorsWinner)
-        : undefined);
+    if (message.validatorsWinner) {
+      obj.validatorsWinner = message.validatorsWinner.map((e) =>
+        e ? ValidatorsWinner.toJSON(e) : undefined
+      );
+    } else {
+      obj.validatorsWinner = [];
+    }
     return obj;
   },
 
   fromPartial(object: DeepPartial<GenesisState>): GenesisState {
     const message = { ...baseGenesisState } as GenesisState;
     message.betList = [];
+    message.validatorsWinner = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromPartial(object.params);
     } else {
@@ -162,11 +162,9 @@ export const GenesisState = {
       object.validatorsWinner !== undefined &&
       object.validatorsWinner !== null
     ) {
-      message.validatorsWinner = ValidatorsWinner.fromPartial(
-        object.validatorsWinner
-      );
-    } else {
-      message.validatorsWinner = undefined;
+      for (const e of object.validatorsWinner) {
+        message.validatorsWinner.push(ValidatorsWinner.fromPartial(e));
+      }
     }
     return message;
   },

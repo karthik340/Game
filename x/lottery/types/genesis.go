@@ -16,9 +16,9 @@ func DefaultGenesis() *GenesisState {
 		TxnCounter: &TxnCounter{
 			Val: 0,
 		},
-		BetList: []Bet{},
+		BetList:          []Bet{},
 		ValidatorsWinner: nil,
-// this line is used by starport scaffolding # genesis/types/default
+		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
 }

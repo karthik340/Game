@@ -9,9 +9,9 @@ var _ binary.ByteOrder
 
 var (
 	// BetKeyPrefix is the prefix to retrieve all Bet
-	BetKeyPrefix    = []byte{0x01}
-	UserKeyPrefix   = []byte{0x02}
-	WinnerKeyPrefix = []byte{0x03}
+	BetKeyPrefix       = []byte{0x01}
+	WinnerKeyPrefix    = []byte{0x03}
+	ValidatorKeyPrefix = []byte{0x04}
 )
 
 // BetKey returns the store key to retrieve a Bet from the index fields
@@ -28,6 +28,10 @@ func GetBetKeyWithRound(round Round) []byte {
 
 func WinnerKey(round Round) []byte {
 	return append(WinnerKeyPrefix, sdk.Uint64ToBigEndian(round.Val)...)
+}
+
+func ValidatorsWinnerKey(validator string) []byte {
+	return append(ValidatorKeyPrefix, validator...)
 }
 
 //

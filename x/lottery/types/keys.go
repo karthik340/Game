@@ -28,7 +28,3 @@ const (
 const (
 	TxnCounterKey = "TxnCounter-value-"
 )
-
-const (
-	ValidatorsWinnerKey= "ValidatorsWinner-value-"
-)

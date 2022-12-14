@@ -15,9 +15,9 @@ func (k Keeper) ValidatorsWinner(c context.Context, req *types.QueryGetValidator
 	}
 	ctx := sdk.UnwrapSDKContext(c)
 
-	val, found := k.GetValidatorsWinner(ctx)
+	val, found := k.GetValidatorsWinner(ctx, req.Validator)
 	if !found {
-	    return nil, status.Error(codes.NotFound, "not found")
+		return nil, status.Error(codes.NotFound, "not found")
 	}
 
 	return &types.QueryGetValidatorsWinnerResponse{ValidatorsWinner: val}, nil

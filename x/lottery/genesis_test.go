@@ -29,9 +29,7 @@ func TestGenesis(t *testing.T) {
 				Sender: "1",
 			},
 		},
-		ValidatorsWinner: &types.ValidatorsWinner{
-		Winner: "58",
-},
+		ValidatorsWinner: []*types.ValidatorsWinner{},
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -47,5 +45,5 @@ func TestGenesis(t *testing.T) {
 	require.Equal(t, genesisState.TxnCounter, got.TxnCounter)
 	require.ElementsMatch(t, genesisState.BetList, got.BetList)
 	require.Equal(t, genesisState.ValidatorsWinner, got.ValidatorsWinner)
-// this line is used by starport scaffolding # genesis/test/assert
+	// this line is used by starport scaffolding # genesis/test/assert
 }

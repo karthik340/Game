@@ -229,7 +229,7 @@ func TestPlaceBets(t *testing.T) {
 	require.Equal(t, uint64(0), bet.TxNum)
 }
 
-// End to End Test
+// End to End Test tests both place bet and end blocker
 func TestEndToEnd(t *testing.T) {
 	k, bk, ak, ctx := keepertest.LotteryKeeper(t, nil)
 	msgServer := keeper.NewMsgServerImpl(*k)
@@ -380,4 +380,46 @@ func TestEndBlocker_CheckTxnCounter(t *testing.T) {
 	actualRound, found := k.GetRound(ctx)
 	require.True(t, found)
 	require.Equal(t, uint64(0), actualRound.Val)
+}
+
+func TestEndBlocker_CheckProposerWinner(t *testing.T) {
+	proposer := sample.AccAddress()
+	proposerAddr, err := sdk.AccAddressFromBech32(proposer)
+	require.NoError(t, err)
+
+	k, bk, _, ctx := keepertest.LotteryKeeper(t, &tmproto.Header{
+		Time:            testutil.ExampleTimestamp,
+		Height:          testutil.ExampleHeight,
+		ProposerAddress: proposerAddr, // set proposer address so that we can make a bet
+	})
+
+	k.SetRound(ctx, types.Round{
+		Val: 0, // initialize with round as 0
+	})
+
+	msgServer := keeper.NewMsgServerImpl(*k)
+	wctx := sdk.WrapSDKContext(ctx)
+
+	// get random 20 addresses with balance of 500 tokens in each
+	count := 20
+	senders, _ := getRandomAddressesWithFunds(t, ctx, bk, count)
+
+	k.SetValidatorsWinner(ctx, proposer, senders[18]) // proposer setting client18 as winner
+
+	msgPlacebets := make([]*types.MsgPlaceBet, count)
+	for i := 0; i < count; i++ {
+		// get msgPlacebets of bet sizes 1 2 3  ... 20 with fee 5
+		msgPlacebets[i] = getBet(senders[i], 5, int64(i+1))
+	}
+
+	placeBets(t, msgServer, wctx, msgPlacebets) // All 20 clients place msgPlacebets
+
+	abci.EndBlocker(ctx, *k) // call end block to pick winner
+
+	actualWinner, found := k.GetWinner(ctx, types.Round{
+		Val: uint64(0),
+	})
+	require.True(t, found)
+
+	require.Equal(t, senders[18], actualWinner.Winner) // check if proposer's winner is the one who actual won
 }

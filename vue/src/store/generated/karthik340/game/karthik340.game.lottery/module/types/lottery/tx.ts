@@ -12,6 +12,13 @@ export interface MsgPlaceBet {
 
 export interface MsgPlaceBetResponse {}
 
+export interface MsgSetWinner {
+  validator: string;
+  winner: string;
+}
+
+export interface MsgSetWinnerResponse {}
+
 const baseMsgPlaceBet: object = { sender: "" };
 
 export const MsgPlaceBet = {
@@ -141,10 +148,121 @@ export const MsgPlaceBetResponse = {
   },
 };
 
+const baseMsgSetWinner: object = { validator: "", winner: "" };
+
+export const MsgSetWinner = {
+  encode(message: MsgSetWinner, writer: Writer = Writer.create()): Writer {
+    if (message.validator !== "") {
+      writer.uint32(10).string(message.validator);
+    }
+    if (message.winner !== "") {
+      writer.uint32(18).string(message.winner);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSetWinner {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgSetWinner } as MsgSetWinner;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.validator = reader.string();
+          break;
+        case 2:
+          message.winner = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetWinner {
+    const message = { ...baseMsgSetWinner } as MsgSetWinner;
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = String(object.validator);
+    } else {
+      message.validator = "";
+    }
+    if (object.winner !== undefined && object.winner !== null) {
+      message.winner = String(object.winner);
+    } else {
+      message.winner = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgSetWinner): unknown {
+    const obj: any = {};
+    message.validator !== undefined && (obj.validator = message.validator);
+    message.winner !== undefined && (obj.winner = message.winner);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgSetWinner>): MsgSetWinner {
+    const message = { ...baseMsgSetWinner } as MsgSetWinner;
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    } else {
+      message.validator = "";
+    }
+    if (object.winner !== undefined && object.winner !== null) {
+      message.winner = object.winner;
+    } else {
+      message.winner = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgSetWinnerResponse: object = {};
+
+export const MsgSetWinnerResponse = {
+  encode(_: MsgSetWinnerResponse, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSetWinnerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgSetWinnerResponse } as MsgSetWinnerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgSetWinnerResponse {
+    const message = { ...baseMsgSetWinnerResponse } as MsgSetWinnerResponse;
+    return message;
+  },
+
+  toJSON(_: MsgSetWinnerResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: DeepPartial<MsgSetWinnerResponse>): MsgSetWinnerResponse {
+    const message = { ...baseMsgSetWinnerResponse } as MsgSetWinnerResponse;
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   PlaceBet(request: MsgPlaceBet): Promise<MsgPlaceBetResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  SetWinner(request: MsgSetWinner): Promise<MsgSetWinnerResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -160,6 +278,18 @@ export class MsgClientImpl implements Msg {
       data
     );
     return promise.then((data) => MsgPlaceBetResponse.decode(new Reader(data)));
+  }
+
+  SetWinner(request: MsgSetWinner): Promise<MsgSetWinnerResponse> {
+    const data = MsgSetWinner.encode(request).finish();
+    const promise = this.rpc.request(
+      "karthik340.game.lottery.Msg",
+      "SetWinner",
+      data
+    );
+    return promise.then((data) =>
+      MsgSetWinnerResponse.decode(new Reader(data))
+    );
   }
 }
 

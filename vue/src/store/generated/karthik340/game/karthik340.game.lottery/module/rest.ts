@@ -35,6 +35,8 @@ export interface LotteryBet {
 
 export type LotteryMsgPlaceBetResponse = object;
 
+export type LotteryMsgSetWinnerResponse = object;
+
 /**
  * Params defines the parameters for the module.
  */
@@ -504,10 +506,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @summary Queries a ValidatorsWinner by index.
    * @request GET:/karthik340/game/lottery/validators_winner
    */
-  queryValidatorsWinner = (params: RequestParams = {}) =>
+  queryValidatorsWinner = (query?: { validator?: string }, params: RequestParams = {}) =>
     this.request<LotteryQueryGetValidatorsWinnerResponse, RpcStatus>({
       path: `/karthik340/game/lottery/validators_winner`,
       method: "GET",
+      query: query,
       format: "json",
       ...params,
     });

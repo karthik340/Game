@@ -5,10 +5,12 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
 import { MsgPlaceBet } from "./types/lottery/tx";
+import { MsgSetWinner } from "./types/lottery/tx";
 
 
 const types = [
   ["/karthik340.game.lottery.MsgPlaceBet", MsgPlaceBet],
+  ["/karthik340.game.lottery.MsgSetWinner", MsgSetWinner],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -42,6 +44,7 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
     msgPlaceBet: (data: MsgPlaceBet): EncodeObject => ({ typeUrl: "/karthik340.game.lottery.MsgPlaceBet", value: MsgPlaceBet.fromPartial( data ) }),
+    msgSetWinner: (data: MsgSetWinner): EncodeObject => ({ typeUrl: "/karthik340.game.lottery.MsgSetWinner", value: MsgSetWinner.fromPartial( data ) }),
     
   };
 };

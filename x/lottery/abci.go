@@ -13,20 +13,24 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 		bets := k.GetBetsByRound(ctx, round)
 		txnCount, _ := k.GetTxnCounter(ctx)
 
-		if txnCount.Val >= k.MinTxn(ctx) { // if number of txns are greater than equal to 10 then pick winner
+		if txnCount.Val >= k.MinTxn(ctx) { // if number of txns are greater than equal to 10 then pick winnerBet
+			// if proposers winner or proposers winner bet not found the we use hash func to find winner
+			proposersWinner, found := k.GetProposersWinner(ctx) // get the winner selected by proposer
+			if found {
+				winnerBet, found := k.GetBetInCurrentRound(ctx, proposersWinner.Winner) // get the bet of winner
+				if found {
+					k.PayWinner(ctx, winnerBet, bets)
+					k.ModifyLotteryData(ctx, winnerBet, round, txnCount)
+					return
+				}
+			}
+
 			winnerTxNum := k.GetWinnerIndex(bets, txnCount.Val, round.Val)
-			winner, _ := k.GetBetByTxNumber(ctx, round, winnerTxNum)
+			winnerBet, _ := k.GetBetByTxNumber(ctx, round, winnerTxNum)
 
-			k.PayWinner(ctx, winner, bets)
+			k.PayWinner(ctx, winnerBet, bets)
 
-			winner.Status = true                   // change the status of winner status to true
-			k.SetBetInCurrentRound(ctx, winner)    // store bet
-			k.SetWinner(ctx, round, winner.Sender) // set winner
-
-			round.Val += 1   // increment round
-			txnCount.Val = 0 // make txn txnCount zero
-			k.SetRound(ctx, round)
-			k.SetTxnCounter(ctx, txnCount)
+			k.ModifyLotteryData(ctx, winnerBet, round, txnCount)
 		}
 	}
 }

@@ -36,10 +36,8 @@ func TestGenesisState_Validate(t *testing.T) {
 						Sender: "1",
 					},
 				},
-				ValidatorsWinner: &types.ValidatorsWinner{
-		Winner: "1",
-},
-// this line is used by starport scaffolding # types/genesis/validField
+				ValidatorsWinner: []*types.ValidatorsWinner{},
+				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
 		},

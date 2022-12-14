@@ -41,6 +41,34 @@ func (k Keeper) GetBetInCurrentRound(ctx sdk.Context, sender string) (val types.
 	return val, true
 }
 
+// SetValidatorsWinner set validatorsWinner in the store
+func (k Keeper) SetValidatorsWinner(ctx sdk.Context, validator string, winner string) {
+	store := ctx.KVStore(k.storeKey)
+	b := k.cdc.MustMarshal(&types.ValidatorsWinner{
+		Winner: winner,
+	})
+
+	key := types.ValidatorsWinnerKey(validator)
+
+	store.Set(key, b)
+}
+
+// GetValidatorsWinner returns validatorsWinner
+func (k Keeper) GetValidatorsWinner(ctx sdk.Context, validator string) (val types.ValidatorsWinner, found bool) {
+	var (
+		store = ctx.KVStore(k.storeKey)
+		key   = types.ValidatorsWinnerKey(validator)
+	)
+
+	rawBytes := store.Get(key)
+	if rawBytes == nil {
+		return
+	}
+
+	k.cdc.MustUnmarshal(rawBytes, &val)
+	return val, true
+}
+
 // CheckForProposerInBets checks if proposer has participated in lottery
 func (k Keeper) CheckForProposerInBets(ctx sdk.Context) bool {
 	var addr sdk.AccAddress
@@ -191,4 +219,33 @@ func (k Keeper) GetWinnerIndex(bets []types.Bet, txnCount uint64, round uint64) 
 	num := new(big.Int).SetBytes(hash[16:]).Uint64()
 
 	return num % txnCount
+}
+
+func (k Keeper) GetProposersWinner(ctx sdk.Context) (types.ValidatorsWinner, bool) {
+	var addr sdk.AccAddress
+
+	err := addr.Unmarshal(ctx.BlockHeader().ProposerAddress)
+	if err != nil {
+		panic(err)
+	}
+
+	proposer := addr.String()
+
+	return k.GetValidatorsWinner(ctx, proposer)
+}
+
+func (k Keeper) ModifyLotteryData(
+	ctx sdk.Context,
+	winnerBet types.Bet,
+	round types.Round,
+	txnCount types.TxnCounter,
+) {
+	winnerBet.Status = true                   // change the status of winnerBet status to true
+	k.SetBetInCurrentRound(ctx, winnerBet)    // store bet
+	k.SetWinner(ctx, round, winnerBet.Sender) // set winnerBet
+
+	round.Val += 1   // increment round
+	txnCount.Val = 0 // make txn txnCount zero
+	k.SetRound(ctx, round)
+	k.SetTxnCounter(ctx, txnCount)
 }

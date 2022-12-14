@@ -59,7 +59,9 @@ export interface QueryGetWinnerByRoundResponse {
   winner: string;
 }
 
-export interface QueryGetValidatorsWinnerRequest {}
+export interface QueryGetValidatorsWinnerRequest {
+  validator: string;
+}
 
 export interface QueryGetValidatorsWinnerResponse {
   ValidatorsWinner: ValidatorsWinner | undefined;
@@ -789,13 +791,16 @@ export const QueryGetWinnerByRoundResponse = {
   },
 };
 
-const baseQueryGetValidatorsWinnerRequest: object = {};
+const baseQueryGetValidatorsWinnerRequest: object = { validator: "" };
 
 export const QueryGetValidatorsWinnerRequest = {
   encode(
-    _: QueryGetValidatorsWinnerRequest,
+    message: QueryGetValidatorsWinnerRequest,
     writer: Writer = Writer.create()
   ): Writer {
+    if (message.validator !== "") {
+      writer.uint32(10).string(message.validator);
+    }
     return writer;
   },
 
@@ -811,6 +816,9 @@ export const QueryGetValidatorsWinnerRequest = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.validator = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -819,24 +827,35 @@ export const QueryGetValidatorsWinnerRequest = {
     return message;
   },
 
-  fromJSON(_: any): QueryGetValidatorsWinnerRequest {
+  fromJSON(object: any): QueryGetValidatorsWinnerRequest {
     const message = {
       ...baseQueryGetValidatorsWinnerRequest,
     } as QueryGetValidatorsWinnerRequest;
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = String(object.validator);
+    } else {
+      message.validator = "";
+    }
     return message;
   },
 
-  toJSON(_: QueryGetValidatorsWinnerRequest): unknown {
+  toJSON(message: QueryGetValidatorsWinnerRequest): unknown {
     const obj: any = {};
+    message.validator !== undefined && (obj.validator = message.validator);
     return obj;
   },
 
   fromPartial(
-    _: DeepPartial<QueryGetValidatorsWinnerRequest>
+    object: DeepPartial<QueryGetValidatorsWinnerRequest>
   ): QueryGetValidatorsWinnerRequest {
     const message = {
       ...baseQueryGetValidatorsWinnerRequest,
     } as QueryGetValidatorsWinnerRequest;
+    if (object.validator !== undefined && object.validator !== null) {
+      message.validator = object.validator;
+    } else {
+      message.validator = "";
+    }
     return message;
   },
 };

@@ -15,6 +15,7 @@ ignite chain serve
 * Code explained (How solution is approached)
 * Configuration
 * How to play lottery game (walk through)
+* Proposer choosing winner explained 
 * Strategies
 
 ## Environment
@@ -227,3 +228,5 @@ gamed query bank balances $alice
 ## Changes in app.go
 * give permission for module account to mint and burn tokens, so that we can store tokens in module account
 * Add bank keeper and authentication keeper for lottery module 
+
+
