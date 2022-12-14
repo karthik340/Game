@@ -4,11 +4,13 @@ import (
 	"context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	keepertest "github.com/karthik340/game/testutil/keeper"
+	testutil "github.com/karthik340/game/testutil/keeper"
 	"github.com/karthik340/game/testutil/sample"
 	abci "github.com/karthik340/game/x/lottery"
 	"github.com/karthik340/game/x/lottery/keeper"
 	"github.com/karthik340/game/x/lottery/types"
 	"github.com/stretchr/testify/require"
+	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	"strconv"
 	"testing"
 )
@@ -307,4 +309,75 @@ func TestEndToEnd(t *testing.T) {
 	actualTxnCounter, found := k.GetTxnCounter(ctx)
 	require.True(t, found)
 	require.Equal(t, uint64(0), actualTxnCounter.Val)
+}
+
+func TestEndBlocker_CheckProposerBet(t *testing.T) {
+	proposer := sample.AccAddress()
+	proposerAddr, err := sdk.AccAddressFromBech32(proposer)
+	require.NoError(t, err)
+
+	k, bk, _, ctx := keepertest.LotteryKeeper(t, &tmproto.Header{
+		Time:            testutil.ExampleTimestamp,
+		Height:          testutil.ExampleHeight,
+		ProposerAddress: proposerAddr, // set proposer address so that we can make a bet
+	})
+
+	k.SetRound(ctx, types.Round{
+		Val: 0, // initialize with round as 0
+	})
+
+	msgServer := keeper.NewMsgServerImpl(*k)
+	wctx := sdk.WrapSDKContext(ctx)
+
+	// get random 20 addresses with balance of 500 tokens in each
+	count := 20
+	senders, _ := getRandomAddressesWithFunds(t, ctx, bk, count)
+
+	fundAddr(t, ctx, bk, proposerAddr, sdk.NewCoin("token", sdk.NewInt(500)))
+	senders[8] = proposer // replace one of the participant as proposer
+
+	msgPlacebets := make([]*types.MsgPlaceBet, count)
+	for i := 0; i < count; i++ {
+		// get msgPlacebets of bet sizes 1 2 3  ... 20 with fee 5
+		msgPlacebets[i] = getBet(senders[i], 5, int64(i+1))
+	}
+
+	placeBets(t, msgServer, wctx, msgPlacebets) // All 20 clients place msgPlacebets
+
+	abci.EndBlocker(ctx, *k) // call end block to pick winner
+
+	// make sure transaction not executed as proposer address present in  bets
+	actualRound, found := k.GetRound(ctx)
+	require.True(t, found)
+	require.Equal(t, uint64(0), actualRound.Val)
+}
+
+func TestEndBlocker_CheckTxnCounter(t *testing.T) {
+	k, bk, _, ctx := keepertest.LotteryKeeper(t, nil)
+
+	k.SetRound(ctx, types.Round{
+		Val: 0, // initialize with round as 0
+	})
+
+	msgServer := keeper.NewMsgServerImpl(*k)
+	wctx := sdk.WrapSDKContext(ctx)
+
+	// get random 9 addresses with balance of 500 tokens in each
+	count := 9
+	senders, _ := getRandomAddressesWithFunds(t, ctx, bk, count)
+
+	msgPlacebets := make([]*types.MsgPlaceBet, count)
+	for i := 0; i < count; i++ {
+		// get msgPlacebets of bet sizes 1 2 3  ... 9 with fee 5
+		msgPlacebets[i] = getBet(senders[i], 5, int64(i+1))
+	}
+
+	placeBets(t, msgServer, wctx, msgPlacebets) // All 9 clients place msgPlacebets
+
+	abci.EndBlocker(ctx, *k) // call end block to pick winner
+
+	// make sure transaction not executed as number of transactions less than 10
+	actualRound, found := k.GetRound(ctx)
+	require.True(t, found)
+	require.Equal(t, uint64(0), actualRound.Val)
 }
