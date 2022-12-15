@@ -221,6 +221,7 @@ func (k Keeper) GetWinnerIndex(bets []types.Bet, txnCount uint64, round uint64) 
 	return num % txnCount
 }
 
+// GetProposersWinner returns the winner selected by proposer
 func (k Keeper) GetProposersWinner(ctx sdk.Context) (types.ValidatorsWinner, bool) {
 	var addr sdk.AccAddress
 
@@ -234,6 +235,7 @@ func (k Keeper) GetProposersWinner(ctx sdk.Context) (types.ValidatorsWinner, boo
 	return k.GetValidatorsWinner(ctx, proposer)
 }
 
+// ModifyLotteryData modifies round,txnCounter,winner
 func (k Keeper) ModifyLotteryData(
 	ctx sdk.Context,
 	winnerBet types.Bet,
