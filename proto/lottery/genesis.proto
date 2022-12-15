@@ -1,0 +1,23 @@
+syntax = "proto3";
+package karthik340.game.lottery;
+
+
+import "gogoproto/gogo.proto";
+import "lottery/params.proto";
+import "lottery/round.proto";
+import "lottery/txn_counter.proto";
+import "lottery/bet.proto";
+import "lottery/validators_winner.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/karthik340/game/x/lottery/types";
+
+// GenesisState defines the lottery module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  Round round = 2;
+  TxnCounter txnCounter = 3;
+  repeated Bet betList = 4 [(gogoproto.nullable) = false];
+  repeated ValidatorsWinner validatorsWinner = 5;
+  // this line is used by starport scaffolding # genesis/proto/state
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+package karthik340.game.lottery;
+
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/karthik340/game/x/lottery/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+  uint64 minFee = 1 [(gogoproto.moretags) = "yaml:\"min_fee\""];
+  uint64 minBet = 2 [(gogoproto.moretags) = "yaml:\"min_bet\""];
+  uint64 maxBet = 3 [(gogoproto.moretags) = "yaml:\"max_bet\""];
+  uint64 minTxn = 4 [(gogoproto.moretags) = "yaml:\"min_txn\""];
+}

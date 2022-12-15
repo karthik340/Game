@@ -1,0 +1,105 @@
+syntax = "proto3";
+package karthik340.game.lottery;
+
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "lottery/params.proto";
+import "lottery/round.proto";
+import "lottery/txn_counter.proto";
+import "lottery/bet.proto";
+import "lottery/validators_winner.proto";
+// this line is used by starport scaffolding # 1
+
+option go_package = "github.com/karthik340/game/x/lottery/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/game/lottery/params";
+  }
+  // Queries a Round by index.
+	rpc Round(QueryGetRoundRequest) returns (QueryGetRoundResponse) {
+		option (google.api.http).get = "/game/lottery/round";
+	}
+// Queries a TxnCounter by index.
+	rpc TxnCounter(QueryGetTxnCounterRequest) returns (QueryGetTxnCounterResponse) {
+		option (google.api.http).get = "/game/lottery/txn_counter";
+	}
+// Queries a Bet by index.
+	rpc Bet(QueryGetBetRequest) returns (QueryGetBetResponse) {
+		option (google.api.http).get = "/game/lottery/bet/{sender}";
+	}
+
+	// Queries a list of Bet items.
+	rpc BetAll(QueryAllBetRequest) returns (QueryAllBetResponse) {
+		option (google.api.http).get = "/game/lottery/bet";
+	}
+
+// Queries a list of GetWinnerByRound items.
+	rpc GetWinnerByRound(QueryGetWinnerByRoundRequest) returns (QueryGetWinnerByRoundResponse) {
+		option (google.api.http).get = "/karthik340/game/lottery/get_winner_by_round/{round}";
+	}
+
+// Queries a ValidatorsWinner by index.
+	rpc ValidatorsWinner(QueryGetValidatorsWinnerRequest) returns (QueryGetValidatorsWinnerResponse) {
+		option (google.api.http).get = "/karthik340/game/lottery/validators_winner";
+	}
+// this line is used by starport scaffolding # 2
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetRoundRequest {}
+
+message QueryGetRoundResponse {
+	Round Round = 1 [(gogoproto.nullable) = false];
+}
+message QueryGetTxnCounterRequest {}
+
+message QueryGetTxnCounterResponse {
+	TxnCounter TxnCounter = 1 [(gogoproto.nullable) = false];
+}
+message QueryGetBetRequest {
+	  string sender = 1;
+
+}
+
+message QueryGetBetResponse {
+	Bet bet = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllBetRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllBetResponse {
+	repeated Bet bet = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetWinnerByRoundRequest {
+  uint64 round = 1;
+}
+
+message QueryGetWinnerByRoundResponse {
+  string winner = 1;
+}
+
+message QueryGetValidatorsWinnerRequest {
+	string validator = 1;
+}
+
+message QueryGetValidatorsWinnerResponse {
+	ValidatorsWinner ValidatorsWinner = 1 [(gogoproto.nullable) = false];
+}
+// this line is used by starport scaffolding # 3

@@ -1,0 +1,10 @@
+syntax = "proto3";
+package karthik340.game.lottery;
+
+
+option go_package = "github.com/karthik340/game/x/lottery/types";
+
+message Round {
+  uint64 val = 1; 
+  
+}
