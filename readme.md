@@ -15,6 +15,7 @@ ignite chain serve
 * Code explained (How solution is approached)
 * Configuration
 * How to play lottery game (walk through)
+* Efficient hash function
 * Proposer choosing winner explained 
 * Proposer can not cheat in lottery explained
 * Strategies
@@ -202,6 +203,9 @@ gamed query bank balances $alice
  go test ./... // for running tests
 ```
 
+## Efficient hash function
+* ethereum's Keccak256 hash function which produces 32 byte hash is used for winner determination
+* Round is also appended to serialized tx data to create randomness
 ## Proposer choosing winner explained
 * Validator(key) -> winner(value) is stores in kv store so that validator can tell who should win if they are selected as proposer.
 * Inorder to select winner validator uses  gamed tx lottery set-winner command
