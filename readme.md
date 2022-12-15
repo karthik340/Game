@@ -16,6 +16,7 @@ ignite chain serve
 * Configuration
 * How to play lottery game (walk through)
 * Proposer choosing winner explained 
+* Proposer can not cheat in lottery explained
 * Strategies
 
 ## Environment
@@ -198,8 +199,18 @@ gamed query bank balances $alice
 ./simulate_bet.sh
 ./balance.sh // use to know balances exclusively
  gamed q lottery get-winner-by-round 0 // use to know winner of any round by providing round num 
+ go test ./... // for running tests
 ```
 
+## Proposer choosing winner explained
+* Validator(key) -> winner(value) is stores in kv store so that validator can tell who should win if they are selected as proposer.
+* Inorder to select winner validator uses  gamed tx lottery set-winner command
+* In End Blocker if proposer has selected winner then he will be declared as winner else hashing method used to select winner
+
+## Proposer can not cheat in lottery
+* In the branch of lottery proposer cannot cheat as
+  * lottery chooses winner in random way that can be verified later
+  * In case if proposer modifies code to choose different winner, then consensus won't be achieved
 ## Strategies
 * Assuming uniform random bet from all other clients, what is the best strategy for client1?
   * as bet sizes distributed uniformly and also randomly,lets divide 100 bet sizes among other 19 clients
