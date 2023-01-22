@@ -19834,6 +19834,396 @@ paths:
           format: int64
       tags:
         - Query
+  /game/lottery/bet:
+    get:
+      summary: Queries a list of Bet items.
+      operationId: GameLotteryBetAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              bet:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    sender:
+                      type: string
+                    fee:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+                    bet:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+                    status:
+                      type: boolean
+                    txNum:
+                      type: string
+                      format: uint64
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  '/game/lottery/bet/{sender}':
+    get:
+      summary: Queries a Bet by index.
+      operationId: GameLotteryBet
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              bet:
+                type: object
+                properties:
+                  sender:
+                    type: string
+                  fee:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
+
+
+                      NOTE: The amount field is an Int which implements the
+                      custom method
+
+                      signatures required by gogoproto.
+                  bet:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
+
+
+                      NOTE: The amount field is an Int which implements the
+                      custom method
+
+                      signatures required by gogoproto.
+                  status:
+                    type: boolean
+                  txNum:
+                    type: string
+                    format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: sender
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /game/lottery/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: GameLotteryParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+                properties:
+                  minFee:
+                    type: string
+                    format: uint64
+                  minBet:
+                    type: string
+                    format: uint64
+                  maxBet:
+                    type: string
+                    format: uint64
+                  minTxn:
+                    type: string
+                    format: uint64
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /game/lottery/round:
+    get:
+      summary: Queries a Round by index.
+      operationId: GameLotteryRound
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Round:
+                type: object
+                properties:
+                  val:
+                    type: string
+                    format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /game/lottery/txn_counter:
+    get:
+      summary: Queries a TxnCounter by index.
+      operationId: GameLotteryTxnCounter
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              TxnCounter:
+                type: object
+                properties:
+                  val:
+                    type: string
+                    format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  '/karthik340/game/lottery/get_winner_by_round/{round}':
+    get:
+      summary: Queries a list of GetWinnerByRound items.
+      operationId: GameLotteryGetWinnerByRound
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              winner:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: round
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
   /ibc/apps/interchain_accounts/controller/v1/params:
     get:
       summary: Params queries all parameters of the ICA controller submodule.
@@ -47385,6 +47775,226 @@ definitions:
     description: >-
       MsgCreateVestingAccountResponse defines the Msg/CreateVestingAccount
       response type.
+  game.lottery.Bet:
+    type: object
+    properties:
+      sender:
+        type: string
+      fee:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+      bet:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+      status:
+        type: boolean
+      txNum:
+        type: string
+        format: uint64
+  game.lottery.MsgPlaceBetResponse:
+    type: object
+  game.lottery.Params:
+    type: object
+    properties:
+      minFee:
+        type: string
+        format: uint64
+      minBet:
+        type: string
+        format: uint64
+      maxBet:
+        type: string
+        format: uint64
+      minTxn:
+        type: string
+        format: uint64
+    description: Params defines the parameters for the module.
+  game.lottery.QueryAllBetResponse:
+    type: object
+    properties:
+      bet:
+        type: array
+        items:
+          type: object
+          properties:
+            sender:
+              type: string
+            fee:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+            bet:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+            status:
+              type: boolean
+            txNum:
+              type: string
+              format: uint64
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  game.lottery.QueryGetBetResponse:
+    type: object
+    properties:
+      bet:
+        type: object
+        properties:
+          sender:
+            type: string
+          fee:
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
+            description: >-
+              Coin defines a token with a denomination and an amount.
+
+
+              NOTE: The amount field is an Int which implements the custom
+              method
+
+              signatures required by gogoproto.
+          bet:
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
+            description: >-
+              Coin defines a token with a denomination and an amount.
+
+
+              NOTE: The amount field is an Int which implements the custom
+              method
+
+              signatures required by gogoproto.
+          status:
+            type: boolean
+          txNum:
+            type: string
+            format: uint64
+  game.lottery.QueryGetRoundResponse:
+    type: object
+    properties:
+      Round:
+        type: object
+        properties:
+          val:
+            type: string
+            format: uint64
+  game.lottery.QueryGetTxnCounterResponse:
+    type: object
+    properties:
+      TxnCounter:
+        type: object
+        properties:
+          val:
+            type: string
+            format: uint64
+  game.lottery.QueryGetWinnerByRoundResponse:
+    type: object
+    properties:
+      winner:
+        type: string
+  game.lottery.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+        properties:
+          minFee:
+            type: string
+            format: uint64
+          minBet:
+            type: string
+            format: uint64
+          maxBet:
+            type: string
+            format: uint64
+          minTxn:
+            type: string
+            format: uint64
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
+  game.lottery.Round:
+    type: object
+    properties:
+      val:
+        type: string
+        format: uint64
+  game.lottery.TxnCounter:
+    type: object
+    properties:
+      val:
+        type: string
+        format: uint64
   ibc.applications.interchain_accounts.controller.v1.Params:
     type: object
     properties:
